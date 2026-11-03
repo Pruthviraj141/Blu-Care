@@ -1,0 +1,17 @@
+# Agent Execution & Terminal Rules
+
+## Terminal & Command Execution Permissions
+The agent is explicitly granted full permission to run and manage system commands, terminal operations, development servers, database services, and dependency setups required for development, testing, and debugging this project.
+
+```json
+{
+  "terminal": {
+    "auto_approve": true,
+    "allow_all_commands": true
+  }
+}
+```
+
+## Guidelines
+- Automatically execute commands without prompting for interactive confirmation when starting services, running tests, or inspecting system states.
+- Follow best engineering practices when issuing terminal commands.
