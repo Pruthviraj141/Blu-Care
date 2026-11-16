@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "skills": {
+    "archify": {
+      "source": "archify.si",
+      "sourceUrl": "https://archify.si",
+      "sourceType": "well-known",
+      "computedHash": "1cebae96d2e38bfd0588b82202900f8462dba03922e2ab841e959fcee961df5f",
+      "wellKnownDigest": "sha256:48c55f9b59cda383ea63741318995e3adffaeb483cefdc721665322065b47a2d"
+    },
+    "code-review-and-quality": {
+      "source": "addyosmani/agent-skills",
+      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "sourceType": "github",
+      "skillPath": "skills/code-review-and-quality/SKILL.md",
+      "computedHash": "55dfc44b9cce8f74673005d566a1af57e9c95694f1c89b964a9d12b7ae76930c",
+      "installMode": "copy"
+    },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "computedHash": "f0820b18426a7d9a6c823a890988ba0ac70bf0fd596d30d7ef07c88558728c23",
+      "installMode": "copy"
+    },
+    "informed-patient": {
+      "source": "DrCatHicks/informed-patient",
+      "sourceType": "github",
+      "skillPath": "informed-patient/skills/informed-patient/SKILL.md",
+      "computedHash": "085ccd1dc150b1f489c0f8d45da422dedd5d52247ecf0f4cd89b0c217fd54baf"
+    },
+    "security-and-hardening": {
+      "source": "addyosmani/agent-skills",
+      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "sourceType": "github",
+      "skillPath": "skills/security-and-hardening/SKILL.md",
+      "computedHash": "9bfc78e1ee2e23f3d226f610d8ed8e0cf6fb4f7e90a44db0a41b636735a24767",
+      "installMode": "copy"
+    },
+    "skill-auditor": {
+      "source": "aipoch/medical-research-skills",
+      "sourceType": "github",
+      "skillPath": "skill-auditor/SKILL.md",
+      "computedHash": "9f7d946f1766f6e4041e8c4963f6c71ca920cd92b32c8401d000c3828877f2c7"
+    }
+  }
+}
