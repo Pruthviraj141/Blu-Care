@@ -25,16 +25,31 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application startup and graceful shutdown lifespan manager."""
-    logger.info("Starting up BluCare+ Backend: warming up RAG store (Qdrant + Embeddings + Reranker)...")
+    logger.info("Starting up BluCare+ Backend: initializing database and RAG store...")
+    try:
+        from app.db.session import init_db
+        init_db()
+        logger.info("Database initialized.")
+    except Exception as e:
+        logger.error(f"Database initialization error: {e}")
+
     try:
         warm_up()
-        logger.info("RAG Store warm-up complete. Service ready.")
+        from app.rag.document_ingestion import ingest_curated_knowledge
+        ingest_curated_knowledge()
+        logger.info("RAG Store warm-up and knowledge sync complete. Service ready.")
     except Exception as e:
         logger.warning(f"RAG store warm-up warning (running in degraded mode): {e}")
 
     yield
 
     logger.info("Shutting down BluCare+ Backend. Releasing resources...")
+    try:
+        from app.core.langfuse_client import flush_langfuse, shutdown_langfuse
+        flush_langfuse()
+        shutdown_langfuse()
+    except Exception as e:
+        logger.debug(f"Langfuse shutdown notice: {e}")
 
 
 app = FastAPI(
@@ -67,8 +82,9 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
 )
 
@@ -107,12 +123,23 @@ async def health_check():
 
 @app.get("/health/ready", tags=["Health Probes"])
 async def readiness_check():
-    """Readiness probe checking Qdrant and environment configuration."""
+    """Readiness probe checking Database, Qdrant and environment configuration."""
     qdrant_ok = bool(settings.qdrant_url)
+    db_ok = False
+    try:
+        from app.db.session import engine
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        db_ok = True
+    except Exception as e:
+        logger.warning(f"Database readiness check failed: {e}")
+
+    overall_ready = qdrant_ok and db_ok
     return {
-        "status": "ready" if qdrant_ok else "degraded",
+        "status": "ready" if overall_ready else "degraded",
+        "database": "connected" if db_ok else "disconnected",
         "qdrant": "connected" if qdrant_ok else "disconnected",
-        "redis_url": settings.redis_url,
         "environment": settings.app_env,
     }
 

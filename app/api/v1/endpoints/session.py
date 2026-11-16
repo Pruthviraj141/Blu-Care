@@ -10,6 +10,7 @@ from app.schemas.api import (
     StartSessionResponse,
     ChatMessageRequest,
     ChatMessageResponse,
+    ActionExecutionRequest,
     SessionListResponse,
     SessionHistoryResponse,
 )
@@ -22,7 +23,7 @@ router = APIRouter(prefix="/session", tags=["Session & Chat"])
 @router.post("/start", response_model=StartSessionResponse)
 async def start_session(
     req: StartSessionRequest,
-    user_id: str = Depends(get_optional_user),
+    user_id: str = Depends(get_current_user),
 ):
     """Initializes a new LangGraph triage session thread."""
     try:
@@ -39,11 +40,19 @@ async def start_session(
 @router.post("/message", response_model=ChatMessageResponse)
 async def send_message(
     req: ChatMessageRequest,
-    user_id: str = Depends(get_optional_user),
+    user_id: str = Depends(get_current_user),
 ):
-    """Executes a message turn on an active triage graph thread."""
+    """Executes a message turn or action on an active triage graph thread."""
     try:
-        result = await SessionService.process_message_async(req.thread_id, req.message, user_id=user_id)
+        result = await SessionService.process_message_async(
+            thread_id=req.thread_id,
+            message=req.message,
+            user_id=user_id,
+            action_id=req.action_id,
+            condition_id=req.condition_id,
+            latitude=req.latitude,
+            longitude=req.longitude,
+        )
         return ChatMessageResponse(**result)
     except HTTPException:
         raise
@@ -55,10 +64,37 @@ async def send_message(
         )
 
 
+@router.post("/action", response_model=ChatMessageResponse)
+async def execute_action(
+    req: ActionExecutionRequest,
+    user_id: str = Depends(get_current_user),
+):
+    """Executes a post-assessment action (e.g. GET_AYURVEDIC_GUIDANCE or FIND_NEARBY_CLINICS)."""
+    try:
+        result = await SessionService.process_message_async(
+            thread_id=req.thread_id,
+            message="",
+            user_id=user_id,
+            action_id=req.action_id,
+            condition_id=req.condition_id,
+            latitude=req.latitude,
+            longitude=req.longitude,
+        )
+        return ChatMessageResponse(**result)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error executing action {req.action_id} for thread {req.thread_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Error executing action: {str(e)}",
+        )
+
+
 @router.post("/message/stream")
 async def stream_message(
     req: ChatMessageRequest,
-    user_id: str = Depends(get_optional_user),
+    user_id: str = Depends(get_current_user),
 ):
     """Server-Sent Events (SSE) token-by-token streaming endpoint."""
     try:
@@ -75,7 +111,7 @@ async def stream_message(
 
 
 @router.get("/list", response_model=SessionListResponse)
-async def list_sessions(user_id: str = Depends(get_optional_user)):
+async def list_sessions(user_id: str = Depends(get_current_user)):
     """Returns all active triage sessions owned by the authenticated user."""
     try:
         sessions = SessionService.list_user_sessions(user_id)
@@ -91,7 +127,7 @@ async def list_sessions(user_id: str = Depends(get_optional_user)):
 @router.get("/{thread_id}/history", response_model=SessionHistoryResponse)
 async def get_session_history(
     thread_id: str,
-    user_id: str = Depends(get_optional_user),
+    user_id: str = Depends(get_current_user),
 ):
     """Fetches complete message history and state for a triage session thread."""
     try:
@@ -110,7 +146,7 @@ async def get_session_history(
 @router.delete("/{thread_id}")
 async def delete_session(
     thread_id: str,
-    user_id: str = Depends(get_optional_user),
+    user_id: str = Depends(get_current_user),
 ):
     """Deletes a triage session thread."""
     try:
