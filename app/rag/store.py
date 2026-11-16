@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 _qdrant_client = None
 _embeddings = None
 _reranker = None
-_lock = threading.Lock()
+_lock = threading.RLock()
 
 
 def get_qdrant_client() -> QdrantClient:
@@ -28,12 +28,50 @@ def get_qdrant_client() -> QdrantClient:
     if _qdrant_client is None:
         with _lock:
             if _qdrant_client is None:
-                logger.info("Connecting to Qdrant at %s (should print once per process)", settings.qdrant_url)
-                _qdrant_client = QdrantClient(
-                    url=settings.qdrant_url,
-                    api_key=settings.qdrant_api_key,
-                    timeout=60,
-                )
+                # Try remote cloud or configured URL
+                if settings.qdrant_url and not settings.qdrant_url.startswith("local:"):
+                    try:
+                        logger.info("Connecting to Qdrant at %s", settings.qdrant_url)
+                        client = QdrantClient(
+                            url=settings.qdrant_url,
+                            api_key=settings.qdrant_api_key or None,
+                            timeout=5,
+                        )
+                        # Sanity check connection
+                        client.get_collections()
+                        _qdrant_client = client
+                        return _qdrant_client
+                    except Exception as e:
+                        logger.warning("Remote Qdrant unavailable (%s). Falling back to local embedded Qdrant storage.", e)
+
+                import os
+                import fcntl
+                local_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../qdrant_local_store"))
+                lock_file = os.path.join(local_path, ".lock")
+                is_locked = False
+                if os.path.exists(lock_file):
+                    try:
+                        with open(lock_file, "r") as f:
+                            fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                            fcntl.flock(f, fcntl.LOCK_UN)
+                    except (IOError, BlockingIOError, OSError):
+                        is_locked = True
+
+                if not is_locked:
+                    logger.info("Initializing local embedded Qdrant at %s", local_path)
+                    try:
+                        _qdrant_client = QdrantClient(path=local_path)
+                        return _qdrant_client
+                    except Exception as e:
+                        logger.warning("Local embedded Qdrant open failed (%s). Falling back to in-memory instance.", e)
+
+                logger.info("Local Qdrant locked or busy. Initializing isolated in-memory Qdrant instance with knowledge sync.")
+                _qdrant_client = QdrantClient(":memory:")
+                try:
+                    from app.rag.document_ingestion import ingest_curated_knowledge
+                    ingest_curated_knowledge()
+                except Exception as sync_err:
+                    logger.warning("In-memory knowledge sync warning: %s", sync_err)
     return _qdrant_client
 
 
