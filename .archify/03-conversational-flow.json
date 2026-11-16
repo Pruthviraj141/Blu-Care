@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "BluCare+ Conversational Follow-up & Memory Flow",
+    "output": ".archify/03-conversational-flow.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard"
+  },
+  "lanes": [
+    { "id": "user_ui", "label": "User Interface" },
+    { "id": "triage_graph", "label": "LangGraph State Machine" },
+    { "id": "clinical_engine", "label": "Clinical Memory & Extraction" },
+    { "id": "rag_synthesis", "label": "Medical RAG & Synthesis" }
+  ],
+  "phases": [
+    { "id": "intake_phase", "label": "Context & Safety", "fromCol": 0, "toCol": 1 },
+    { "id": "decision_phase", "label": "Extraction & Assessment Decision", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "resolution_phase", "label": "Adaptive Question vs Full RAG", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "groups": [
+    { "id": "state_loop", "label": "Clinical state update", "lane": "clinical_engine", "fromCol": 1, "toCol": 2, "variant": "emphasis" },
+    { "id": "branch_path", "label": "Adaptive branching", "lane": "triage_graph", "fromCol": 3, "toCol": 4, "variant": "dashed" }
+  ],
+  "mainPath": ["user_msg", "intake_node", "safety_gate", "extract_node", "decision_node", "rag_node", "synth_node", "chat_reply"],
+  "nodes": [
+    { "id": "user_msg", "lane": "user_ui", "col": 0, "type": "external", "label": "User Message", "sublabel": "Follow-up symptom", "width": 136 },
+    { "id": "intake_node", "lane": "triage_graph", "col": 1, "type": "backend", "label": "load_patient_context", "sublabel": "Restore case state", "width": 140 },
+    { "id": "memory_store", "lane": "clinical_engine", "col": 1, "type": "database", "label": "PatientCase State", "sublabel": "Structured symptoms", "width": 140 },
+    { "id": "safety_gate", "lane": "triage_graph", "col": 2, "type": "security", "label": "safety_assessment", "sublabel": "Rule-based red flags", "tag": "Zero LLM", "width": 140 },
+    { "id": "extract_node", "lane": "clinical_engine", "col": 2, "type": "backend", "label": "extract_and_merge", "sublabel": "Normalize & dedupe", "width": 140 },
+    { "id": "decision_node", "lane": "triage_graph", "col": 3, "type": "backend", "label": "adaptive_intake_check", "sublabel": "Facts complete?", "tag": "Max 7 turns", "width": 140 },
+    { "id": "ask_node", "lane": "triage_graph", "col": 4, "type": "backend", "label": "ask_one_question", "sublabel": "Target missing fact", "width": 140 },
+    { "id": "rag_node", "lane": "rag_synthesis", "col": 4, "type": "database", "label": "retrieve_evidence", "sublabel": "Qdrant + Reranker", "width": 140 },
+    { "id": "synth_node", "lane": "rag_synthesis", "col": 5, "type": "cloud", "label": "differential_assess", "sublabel": "ChatGroq LLM", "width": 140 },
+    { "id": "chat_reply", "lane": "user_ui", "col": 5, "type": "frontend", "label": "Chat Output", "sublabel": "Question or Assessment", "width": 136 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "user_msg", "to": "intake_node", "label": "send turn", "variant": "emphasis" },
+    { "id": "e2", "from": "intake_node", "to": "memory_store", "label": "read state", "variant": "default" },
+    { "id": "e3", "from": "intake_node", "to": "safety_gate", "label": "evaluate", "variant": "emphasis" },
+    { "id": "e4", "from": "safety_gate", "to": "extract_node", "label": "pass safe", "variant": "security" },
+    { "id": "e5", "from": "extract_node", "to": "decision_node", "label": "updated facts", "variant": "emphasis" },
+    { "id": "e6", "from": "decision_node", "to": "ask_node", "label": "incomplete", "variant": "dashed", "role": "branch" },
+    { "id": "e7", "from": "decision_node", "to": "rag_node", "label": "ready for RAG", "variant": "emphasis" },
+    { "id": "e8", "from": "ask_node", "to": "chat_reply", "label": "adaptive question", "variant": "dashed", "role": "return", "route": "up-channel" },
+    { "id": "e9", "from": "rag_node", "to": "synth_node", "label": "top evidence", "variant": "emphasis" },
+    { "id": "e10", "from": "synth_node", "to": "chat_reply", "label": "full assessment", "variant": "emphasis", "role": "return" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Context Continuity",
+      "items": [
+        "PatientCase tracks symptoms, durations, severities, and negated signs across turns",
+        "SQLite checkpointer ensures zero state loss across multi-turn sessions",
+        "Deterministic lookup engine avoids asking repeated questions"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Adaptive Triage Logic",
+      "items": [
+        "Dynamic question planner prioritizes primary symptom, onset duration, and severity",
+        "Caps interactive questioning at max 7 turns to prevent patient fatigue",
+        "Switches directly to differential RAG once required clinical facts are collected"
+      ]
+    }
+  ]
+}

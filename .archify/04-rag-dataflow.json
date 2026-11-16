@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "BluCare+ Medical RAG Pipeline & Dataflow Topology",
+    "output": ".archify/04-rag-dataflow.html",
+    "viewBox": [1080, 690],
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard"
+  },
+  "stages": [
+    { "label": "Ingress & Sources" },
+    { "label": "Preparation & Query" },
+    { "label": "Embedding & Index" },
+    { "label": "Retrieval & Rerank" },
+    { "label": "Synthesis & Output" }
+  ],
+  "nodes": [
+    { "id": "raw_docs", "type": "external", "label": "Medical Guidelines", "sublabel": "WHO / NICE / CDC", "stage": 0, "row": 0, "tag": "Curated KB" },
+    { "id": "chunk_meta", "type": "backend", "label": "Cleaning & Metadata", "sublabel": "MedicalDocMetadata", "stage": 1, "row": 0, "tag": "SHA-256 Hash" },
+    { "id": "embed_passage", "type": "backend", "label": "Passage Embedder", "sublabel": "bge-small-en-v1.5", "stage": 2, "row": 0, "tag": "No Prefix (384d)" },
+    { "id": "qdrant_store", "type": "database", "label": "Qdrant Index", "sublabel": "medical_triage_kb", "stage": 2, "row": 1, "tag": "Cosine Metric" },
+    { "id": "user_query", "type": "external", "label": "User Query", "sublabel": "Patient symptoms", "stage": 0, "row": 3, "tag": "Turn Input" },
+    { "id": "query_builder", "type": "backend", "label": "Query Builder", "sublabel": "prepare_retrieval", "stage": 1, "row": 3, "tag": "Intent Filter" },
+    { "id": "embed_query_node", "type": "backend", "label": "Query Embedder", "sublabel": "bge_query_instruction", "stage": 2, "row": 3, "tag": "With Prefix (384d)" },
+    { "id": "dense_search", "type": "database", "label": "Dense Retrieval", "sublabel": "score_thresh: 0.55", "stage": 3, "row": 3, "tag": "fetch_k: 20" },
+    { "id": "reranker_node", "type": "backend", "label": "Cross-Encoder", "sublabel": "bge-reranker-base", "stage": 3, "row": 1, "tag": "final_k: 5 (CPU)" },
+    { "id": "context_builder", "type": "backend", "label": "Context Builder", "sublabel": "Token budgets & [S1..5]", "stage": 4, "row": 1, "tag": "Evidence Map" },
+    { "id": "groq_synth", "type": "cloud", "label": "Groq Synthesizer", "sublabel": "qwen3.6-27b + Citations", "stage": 4, "row": 3, "tag": "Verified Output" }
+  ],
+  "flows": [
+    { "from": "raw_docs", "to": "chunk_meta", "label": "clean text & hash", "classification": "ingestion", "variant": "default", "route": "straight" },
+    { "from": "chunk_meta", "to": "embed_passage", "label": "passage vectors", "classification": "ingestion", "variant": "default", "route": "straight" },
+    { "from": "embed_passage", "to": "qdrant_store", "label": "upsert points", "classification": "ingestion", "variant": "emphasis", "route": "vertical-channel" },
+    { "from": "user_query", "to": "query_builder", "label": "symptom phrase", "classification": "query", "variant": "emphasis", "route": "straight" },
+    { "from": "query_builder", "to": "embed_query_node", "label": "prefixed query", "classification": "query", "variant": "emphasis", "route": "straight" },
+    { "from": "embed_query_node", "to": "dense_search", "label": "cosine search", "classification": "query", "variant": "emphasis", "route": "straight" },
+    { "from": "qdrant_store", "to": "dense_search", "label": "vector scan", "classification": "index", "variant": "default", "route": "vertical-channel", "labelDy": -28 },
+    { "from": "dense_search", "to": "reranker_node", "label": "top 20 candidates", "classification": "rerank", "variant": "emphasis", "route": "vertical-channel", "labelDy": 28 },
+    { "from": "reranker_node", "to": "context_builder", "label": "top 5 reranked", "classification": "assembly", "variant": "emphasis", "route": "straight" },
+    { "from": "context_builder", "to": "groq_synth", "label": "evidence context", "classification": "synthesis", "variant": "emphasis", "route": "vertical-channel" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Asymmetric BGE Embeddings",
+      "items": [
+        "Passages are ingested pure, without query instruction prefix",
+        "Queries are prefixed with 'Represent this sentence for searching relevant passages:'",
+        "Ensures high semantic alignment between questions and clinical guideline answers"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Two-Stage Retrieval & Reranking",
+      "items": [
+        "Stage 1 (Bi-Encoder): Qdrant cosine search retrieves top 20 candidate passages with 0.55 cutoff",
+        "Stage 2 (Cross-Encoder): bge-reranker-base scores query-passage pairs jointly to find top 5",
+        "Eliminates false-positive lexical matches and isolates clinically relevant evidence"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Evidence Grounding & Citation Validation",
+      "items": [
+        "ContextBuilder numbers sources [S1..S5] with explicit clinical topic headers",
+        "ChatGroq is constrained to generate claims grounded in retrieved evidence",
+        "CitationValidator inspects output tokens and flags unsupported or hallucinated citations"
+      ]
+    }
+  ]
+}
