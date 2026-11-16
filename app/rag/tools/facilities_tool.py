@@ -1,122 +1,88 @@
+import logging
 from langchain_core.tools import tool
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-import time
+from app.facilities.service import FacilitiesService
+from app.facilities.distance import format_distance
+from app.facilities.maps_urls import build_google_maps_search_url
 
-def get_common_chrome_options():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless=new") # Run in background
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--blink-settings=imagesEnabled=false") # Don't load images (much faster)
-    chrome_options.add_argument("--window-size=1920,1080")
-    return chrome_options
+logger = logging.getLogger(__name__)
+
 
 @tool
 def find_nearby_facilities(disease: str, facility_type: str, lat: float, lon: float) -> str:
     """
-    Scrapes Google Maps to find top-rated nearby hospitals, clinics, or ambulances based on GPS coordinates.
+    Finds nearby hospitals, clinics, or doctor practices using scraping-based facility discovery
+    and provides verified destination coordinates, turn-by-turn directions, and universal Google Maps search links.
     
     Args:
-        disease: The condition the user has (e.g., 'heart', 'headache', 'migraine', 'general'). Pass 'general' if unknown.
-        facility_type: Must be either 'hospital' or 'ambulance'.
+        disease: The condition the user has (e.g. 'cardiac', 'orthopedic', 'fever', 'emergency').
+        facility_type: Category requested ('hospital', 'clinic', 'doctors', or 'all').
         lat: Latitude of the user.
         lon: Longitude of the user.
     
     Returns:
-        A string containing a formatted list of the top 5 nearby facilities (name, rating, phone, link) or an error message.
+        A formatted string containing nearby verified facilities sorted by actual distance,
+        with addresses, phone numbers, and direct navigation links.
     """
-    coords = f"{lat},{lon}"
-    chrome_options = get_common_chrome_options()
-    
-    try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-    except Exception as e:
-        # Fallback to local chromedriver if manager fails
-        try:
-            driver = webdriver.Chrome(options=chrome_options)
-        except Exception as e2:
-            return f"Error initializing browser: {str(e2)}"
-    
-    wait = WebDriverWait(driver, 15) 
-    facilities = []
+    logger.info(f"Facilities tool invoked: lat={lat}, lon={lon}, disease={disease}, facility_type={facility_type}")
+
+    # Map facility_type to allowed category
+    norm_type = facility_type.lower().strip() if facility_type else "hospital"
+    if "ambulance" in norm_type or "hospital" in norm_type:
+        cat = "hospital"
+    elif "clinic" in norm_type:
+        cat = "clinic"
+    elif "doctor" in norm_type:
+        cat = "doctors"
+    else:
+        cat = "all"
 
     try:
-        driver.get(f"https://www.google.com/maps/search/{coords}")
-
-        nearby_btn = wait.until(
-            EC.element_to_be_clickable((By.XPATH, '//button[contains(@aria-label,"Nearby")]'))
+        service = FacilitiesService()
+        response = service.search_nearby(
+            lat=lat,
+            lng=lon,
+            radius=5000,
+            limit=5,
+            category=cat,
+            condition_name=disease,
         )
-        nearby_btn.click()
-        time.sleep(1)
-
-        # Construct search query
-        if facility_type.lower() == 'ambulance':
-            search_query = "ambulance service"
-        else:
-            if disease and disease.lower() != 'general':
-                search_query = f"{disease} hospitals clinics"
-            else:
-                search_query = "hospitals clinics"
-
-        active_element = driver.switch_to.active_element
-        active_element.send_keys(search_query)
-        active_element.send_keys("\n")
-
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "Nv2PK")))
-        time.sleep(2)
-
-        cards = driver.find_elements(By.CLASS_NAME, "Nv2PK")
-
-        for card in cards:
-            try:
-                name = card.find_element(By.CLASS_NAME, "qBF1Pd").text
-                try:
-                    rating = card.find_element(By.CLASS_NAME, "MW4etd").text
-                    rating_float = float(rating)
-                except:
-                    rating_float = 0.0
-
-                try:
-                    phone = card.find_element(By.CLASS_NAME, "UsdlK").text
-                except:
-                    phone = "N/A"
-
-                link = card.find_element(By.CLASS_NAME, "hfpxzc").get_attribute("href")
-
-                facilities.append({
-                    "name": name,
-                    "rating": rating_float,
-                    "phone": phone,
-                    "link": link
-                })
-            except:
-                continue
-
-        sorted_facilities = sorted(facilities, key=lambda x: x["rating"], reverse=True)[:5]
         
-        if not sorted_facilities:
-            return "No facilities found for this location."
-            
-        # Format as string for the LLM
-        output = f"Top 5 nearby {facility_type}s:\n\n"
-        for idx, f in enumerate(sorted_facilities, 1):
-            output += f"{idx}. **{f['name']}**\n"
-            output += f"   - Rating: {f['rating']}⭐\n"
-            output += f"   - Phone: {f['phone']}\n"
-            output += f"   - [Google Maps Link]({f['link']})\n\n"
-            
-        return output
+        maps_search_url = build_google_maps_search_url(
+            lat, lon, "hospitals" if cat == "all" else cat
+        )
+
+        output_lines = [
+            f"**Nearby Healthcare Facilities (sorted nearest first by actual distance):**\n"
+        ]
+
+        if response.facilities:
+            for idx, fac in enumerate(response.facilities, 1):
+                dist_str = fac.distance_formatted or format_distance(fac.distance_meters)
+                name_str = fac.name or f"Unnamed {fac.category.capitalize()}"
+                phone_str = f" | Phone: {fac.phone}" if fac.phone else ""
+                addr_str = f"\n   - Address: {fac.address}" if fac.address else ""
+                nav_link = f"[Turn-by-Turn Directions]({fac.directions_url})" if fac.directions_url else f"[Google Maps]({fac.maps_url})"
+
+                output_lines.append(
+                    f"{idx}. **{name_str}** ({fac.category.capitalize()} - ~{dist_str} away{phone_str}){addr_str}\n"
+                    f"   - {nav_link}"
+                )
+        else:
+            output_lines.append(f"No healthcare facilities discovered within 5 km.")
+
+        output_lines.append(
+            f"\n🔗 **Broader Local Search:** Open [Google Maps Nearby {cat.capitalize()}s]({maps_search_url}) for complete neighborhood directory."
+        )
+
+        return "\n".join(output_lines)
 
     except Exception as e:
-        return f"Error finding facilities: {str(e)}"
-    finally:
-        driver.quit()
+        logger.error(f"Error in find_nearby_facilities tool: {e}", exc_info=True)
+        try:
+            fallback_maps_url = build_google_maps_search_url(lat, lon, "hospitals")
+            return (
+                f"Could not retrieve local facilities at this moment.\n"
+                f"You can search directly on Google Maps: [Find Nearby Hospitals on Google Maps]({fallback_maps_url})"
+            )
+        except Exception:
+            return f"Error retrieving nearby facilities: {str(e)}"
