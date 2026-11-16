@@ -1,10 +1,10 @@
 // src/pages/MultiRagChatPage.jsx - Clean ChatGPT-Style AI Healthcare Workspace
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import GlassCard from '../components/ui/GlassCard';
-import GlowButton from '../components/ui/GlowButton';
-import RiskBadge from '../components/ui/RiskBadge';
+import ChatMessage from '../components/chat/ChatMessage';
+import TypingIndicator from '../components/chat/TypingIndicator';
+import AssessmentSkeleton from '../components/chat/AssessmentSkeleton';
 import { useToast } from '../contexts/ToastContext';
 import { logger } from '../utils/logger';
 import { useAuth } from '@clerk/clerk-react';
@@ -41,7 +41,20 @@ const MultiRagChatPage = () => {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { getToken } = useAuth();
+  const { isLoaded, isSignedIn, getToken } = useAuth();
+
+  // Safe token retriever supporting Clerk loaded and signed-in states
+  const getAuthToken = async () => {
+    try {
+      if (isLoaded && isSignedIn && typeof getToken === 'function') {
+        return await getToken();
+      }
+      return null;
+    } catch (err) {
+      logger.error('Failed to get Clerk JWT token:', err);
+      return null;
+    }
+  };
 
   // AbortController ref for in-flight request cancellation
   const abortControllerRef = useRef(null);
@@ -60,6 +73,7 @@ const MultiRagChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [activeActionId, setActiveActionId] = useState(null);
   const [thinkingStep, setThinkingStep] = useState('Analyzing clinical guidelines...');
 
   // Citations drawer state
@@ -386,23 +400,41 @@ const MultiRagChatPage = () => {
     abortControllerRef.current = controller;
 
     const requestOptions = {
-      getToken,
+      getToken: getAuthToken,
       signal: controller.signal,
       timeout: 45000,
     };
 
     try {
-      let activeThreadId = targetSess.threadId;
+      // Re-fetch latest session from chatStorage to guarantee threadId is up-to-date
+      const freshSess = getSessionById(targetSess.id) || targetSess;
+      let activeThreadId = freshSess.threadId || targetSess.threadId;
       let chatData = null;
 
       if (!activeThreadId) {
         // First message turn in new session: initialize backend thread
         chatData = await chatApi.startSession(queryText, requestOptions);
         activeThreadId = chatData.thread_id;
-        updateSession(targetSess.id, { threadId: activeThreadId });
+        const updated = updateSession(targetSess.id, { threadId: activeThreadId });
+        if (updated) {
+          targetSess = updated;
+          setCurrentSession(updated);
+        }
       } else {
         // Subsequent message turn in existing backend thread
-        chatData = await chatApi.sendMessage(activeThreadId, queryText, requestOptions);
+        try {
+          chatData = await chatApi.sendMessage(activeThreadId, queryText, requestOptions);
+        } catch (sendErr) {
+          if (sendErr instanceof ApiError && (sendErr.status === 404 || sendErr.status === 403 || sendErr.status === 400)) {
+            // Session thread expired, cleared, or ownership changed in backend, automatically restart thread
+            logger.warn(`Backend session thread rejected (${sendErr.status}). Reinitializing new session thread...`);
+            chatData = await chatApi.startSession(queryText, requestOptions);
+            activeThreadId = chatData.thread_id;
+            updateSession(targetSess.id, { threadId: activeThreadId });
+          } else {
+            throw sendErr;
+          }
+        }
       }
 
       clearInterval(thinkingInterval);
@@ -415,6 +447,11 @@ const MultiRagChatPage = () => {
         stage: chatData.stage,
         is_complete: chatData.is_complete,
         symptom_facts: chatData.symptom_facts || {},
+        assessment: chatData.assessment || null,
+        actions: chatData.actions || [],
+        facilities: chatData.facilities || null,
+        external_search: chatData.external_search || null,
+        ayurvedic_guidance: chatData.ayurvedic_guidance || null,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         ...(chatData.risk_level && { risk_level: chatData.risk_level }),
         ...(chatData.confidence !== undefined && { confidence: chatData.confidence }),
@@ -423,7 +460,13 @@ const MultiRagChatPage = () => {
 
       const updatedMsgs = [...newMessages, botMessage];
       setMessages(updatedMsgs);
-      updateSession(targetSess.id, { messages: updatedMsgs });
+      const finalSess = updateSession(targetSess.id, {
+        messages: updatedMsgs,
+        threadId: activeThreadId,
+      });
+      if (finalSess) {
+        setCurrentSession(finalSess);
+      }
       setIsLoading(false);
     } catch (err) {
       clearInterval(thinkingInterval);
@@ -439,11 +482,109 @@ const MultiRagChatPage = () => {
     }
   };
 
+  const handleExecuteAction = async (actionId, conditionId) => {
+    let activeThreadId = currentSession?.threadId;
+    if (!activeThreadId) {
+      try {
+        const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user')?.text || 'Clinical consultation';
+        const initData = await chatApi.startSession(lastUserMsg, { getToken: getAuthToken });
+        activeThreadId = initData.thread_id;
+        updateSession(currentSession.id, { threadId: activeThreadId });
+        setCurrentSession((prev) => ({ ...prev, threadId: activeThreadId }));
+      } catch (initErr) {
+        logger.error('Failed to auto-initialize session for action:', initErr);
+        addToast('No active clinical session found. Please type a message to start.', 'error');
+        return;
+      }
+    }
+
+    setActiveActionId(actionId);
+    setIsLoading(true);
+    setThinkingStep(
+      actionId === 'GET_AYURVEDIC_GUIDANCE'
+        ? 'Retrieving Ayurvedic clinical guidance...'
+        : 'Finding nearby verified healthcare facilities...'
+    );
+
+    let coords = null;
+    if (actionId === 'FIND_NEARBY_CLINICS') {
+      if (typeof navigator !== 'undefined' && navigator.geolocation) {
+        try {
+          const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 8000,
+              maximumAge: 30000,
+            });
+          });
+          if (pos?.coords?.latitude != null && pos?.coords?.longitude != null) {
+            coords = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+          }
+        } catch (geoErr) {
+          logger.warn('Geolocation permission denied or timed out:', geoErr);
+          addToast('Location access not granted. Direct Google Maps search links provided.', 'info');
+        }
+      } else {
+        addToast('Geolocation is not supported by your browser.', 'info');
+      }
+    }
+
+    try {
+      const requestOptions = {
+        getToken: getAuthToken,
+      };
+
+      const actionData = await chatApi.executeAction(activeThreadId, actionId, conditionId, coords, requestOptions);
+
+      const botMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'bot',
+        text: actionData.message || 'Action completed.',
+        stage: actionData.stage,
+        is_complete: actionData.is_complete,
+        symptom_facts: actionData.symptom_facts || {},
+        assessment: actionData.assessment || null,
+        actions: actionData.actions || [],
+        facilities: actionData.facilities || null,
+        external_search: actionData.external_search || null,
+        ayurvedic_guidance: actionData.ayurvedic_guidance || null,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        ...(actionData.risk_level && { risk_level: actionData.risk_level }),
+        ...(actionData.sources && { sources: actionData.sources }),
+      };
+
+      const updatedMsgs = [...messages, botMessage];
+      setMessages(updatedMsgs);
+      const finalSess = updateSession(currentSession.id, {
+        messages: updatedMsgs,
+        threadId: activeThreadId,
+      });
+      if (finalSess) {
+        setCurrentSession(finalSess);
+      }
+    } catch (err) {
+      logger.error('Failed to execute action:', err);
+      addToast(`Action failed: ${err.message}`, 'error');
+    } finally {
+      setIsLoading(false);
+      setActiveActionId(null);
+    }
+  };
+
   const handleCopyText = (text, id) => {
     navigator.clipboard.writeText(text);
     setCopiedMsgId(id);
     addToast('Response copied to clipboard', 'success');
     setTimeout(() => setCopiedMsgId(null), 2000);
+  };
+
+  const handleStopGeneration = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsLoading(false);
+    setThinkingStep('Consultation paused');
   };
 
   return (
@@ -455,12 +596,12 @@ const MultiRagChatPage = () => {
     >
       {/* DRAG & DROP OVERLAY DROPZONE */}
       {isDragging && (
-        <div className="absolute inset-0 z-50 bg-bg-base/90 border-2 border-dashed border-sage rounded-3xl flex flex-col items-center justify-center space-y-3 backdrop-blur-xl animate-fade-in pointer-events-none">
-          <div className="w-16 h-16 rounded-full bg-sage/20 border border-sage/40 text-sage flex items-center justify-center animate-bounce shadow-[0_0_24px_var(--glow-sage)]">
-            <UploadCloud size={32} />
+        <div className="absolute inset-0 z-50 bg-[var(--bg-app)]/90 border-2 border-dashed border-[var(--clinical-teal)] rounded-xl flex flex-col items-center justify-center space-y-3 backdrop-blur-md animate-fade-in pointer-events-none">
+          <div className="w-12 h-12 rounded-lg bg-[var(--clinical-teal)]/15 border border-[var(--clinical-teal)]/30 text-[var(--clinical-teal)] flex items-center justify-center">
+            <UploadCloud size={24} />
           </div>
-          <p className="text-lg font-semibold text-primary">Drop medical files or images here</p>
-          <p className="text-xs text-subdued">Supports PDF, PNG, JPG, WEBP, DOCX, and TXT reports</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">Drop medical files or images here</p>
+          <p className="text-xs text-[var(--text-muted)]">Supports PDF, PNG, JPG, WEBP, DOCX, and TXT reports</p>
         </div>
       )}
 
@@ -472,137 +613,63 @@ const MultiRagChatPage = () => {
           <div
             ref={chatContainerRef}
             onScroll={handleScroll}
-            className="flex-1 overflow-y-auto pr-2 space-y-6 scroll-smooth relative"
+            className="flex-1 overflow-y-auto pr-2 space-y-4 scroll-smooth relative"
           >
-            {/* CLEAN CHATGPT-STYLE EMPTY WELCOME STATE */}
+            {/* MINIMAL LINEAR / APPLE NOTES WELCOME STATE */}
             {messages.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center py-10 text-center max-w-2xl mx-auto space-y-8 animate-fade-in my-auto">
+              <div className="h-full flex flex-col items-center justify-center py-12 text-center max-w-xl mx-auto space-y-8 animate-fade-in my-auto">
                 <div className="space-y-3">
-                  <div className="w-16 h-16 rounded-3xl bg-sage/15 border border-sage/30 text-sage flex items-center justify-center mx-auto shadow-[0_0_24px_var(--glow-sage)]">
-                    <Sparkles size={32} />
+                  <div className="w-12 h-12 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--clinical-teal)] flex items-center justify-center mx-auto shadow-sm">
+                    <Sparkles size={22} />
                   </div>
-                  <h1 className="text-3xl md:text-4xl font-light text-primary tracking-tight">
-                    BluCare<span className="font-semibold text-gradient">+</span>
+                  <h1 className="text-2xl sm:text-3xl font-medium text-[var(--text-primary)] tracking-tight">
+                    BluCare<span className="text-[var(--clinical-teal)] font-semibold">+</span>
                   </h1>
-                  <p className="text-sm font-medium text-sage tracking-wider uppercase font-mono">
-                    AI Healthcare Assistant
+                  <p className="text-xs font-mono text-[var(--clinical-teal)] tracking-wider uppercase">
+                    Clinical AI Triage & Guidance
                   </p>
-                  <p className="text-xs text-subdued max-w-md mx-auto leading-relaxed">
-                    Ask any health question, describe your symptoms, or upload lab reports for evidence-based clinical guidance.
+                  <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed">
+                    Describe your symptoms, ask health questions, or upload lab reports for evidence-grounded differential assessment.
                   </p>
                 </div>
 
                 {/* Suggested Prompt Pills */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left">
                   {suggestedPrompts.map((promptText, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleSendMessage(promptText)}
-                      className="p-3.5 rounded-2xl bg-bg-card/70 border border-light hover:border-sage/40 hover:bg-sage/10 text-xs text-primary font-medium transition-all text-left flex items-center justify-between group cursor-pointer shadow-sm"
+                      className="p-3 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--clinical-teal)]/40 hover:bg-[var(--bg-elevated)] text-xs text-[var(--text-primary)] transition-all text-left flex items-center justify-between group cursor-pointer shadow-sm"
                     >
-                      <span className="line-clamp-2">{promptText}</span>
-                      <Sparkles size={14} className="text-subdued group-hover:text-sage transition-colors shrink-0 ml-2" />
+                      <span className="line-clamp-2 leading-relaxed">{promptText}</span>
+                      <Sparkles size={12} className="text-[var(--text-muted)] group-hover:text-[var(--clinical-teal)] transition-colors shrink-0 ml-2" />
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* MESSAGES FEED */}
+            {/* STRUCTURED MESSAGES FEED */}
             {messages.map((msg) => (
-              <div
+              <ChatMessage
                 key={msg.id}
-                className={`flex gap-3 animate-slide-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                {/* Bot Avatar */}
-                {msg.role === 'bot' && (
-                  <div className="w-8 h-8 rounded-xl bg-sage/15 border border-sage/30 text-sage flex items-center justify-center shrink-0 mt-1 shadow-[0_0_10px_var(--glow-sage)]">
-                    <Bot size={16} />
-                  </div>
-                )}
-
-                {/* Message Bubble */}
-                <div
-                  className={`max-w-[92%] sm:max-w-[85%] md:max-w-[80%] rounded-3xl p-5 space-y-3 ${
-                    msg.role === 'user'
-                      ? 'bg-sage/15 border border-sage/30 text-primary rounded-tr-none shadow-[0_4px_20px_rgba(127,225,195,0.05)]'
-                      : 'bg-bg-card/70 border border-light text-primary rounded-tl-none shadow-base backdrop-blur-xl'
-                  }`}
-                >
-                  {/* Role Header */}
-                  <div className="flex items-center justify-between text-[11px] text-subdued pb-1 border-b border-light/30">
-                    <span className="font-semibold text-secondary flex items-center gap-1.5">
-                      {msg.role === 'user' ? 'Patient Inquiry' : 'BluCare AI'}
-                    </span>
-                    <span className="font-mono">{msg.timestamp}</span>
-                  </div>
-
-                  {/* Markdown Content */}
-                  <div className="prose prose-invert max-w-none text-sm leading-relaxed text-primary">
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  </div>
-
-                  {/* Bot Risk Classifier & Actions */}
-                  {msg.role === 'bot' && (
-                    <div className="pt-3 border-t border-light/40 space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                        <RiskBadge level={msg.risk_level} confidence={msg.confidence} />
-
-                        <div className="flex items-center gap-2">
-                          {msg.sources && (
-                            <button
-                              onClick={() => {
-                                setSelectedCitation(msg.sources[0]);
-                                setShowCitationDrawer(true);
-                              }}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-lavender/10 border border-lavender/30 text-lavender text-[11px] hover:bg-lavender/20 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-lavender"
-                            >
-                              <FileSearch size={12} /> Citations ({msg.sources.length})
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => handleCopyText(msg.text, msg.id)}
-                            className="p-1 rounded-lg text-subdued hover:text-primary hover:bg-bg-surface transition-colors cursor-pointer"
-                            title="Copy Response"
-                          >
-                            {copiedMsgId === msg.id ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Urgent Referral Banner if High Risk */}
-                      {msg.risk_level === 'high' && (
-                        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-rose-300">
-                          <span className="flex items-center gap-2 font-medium">
-                            <AlertCircle size={18} className="shrink-0 text-rose-400" /> Urgent Care Notice — High Risk Parameters
-                          </span>
-                          <span className="text-[11px] font-mono text-rose-400">Call Emergency SOS (108/911)</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* User Avatar */}
-                {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-sage/20 border border-sage/40 text-sage flex items-center justify-center shrink-0 mt-1">
-                    <User size={16} />
-                  </div>
-                )}
-              </div>
+                message={msg}
+                onExecuteAction={handleExecuteAction}
+                isLoadingAction={isLoading}
+                activeActionId={activeActionId}
+                onCopyText={handleCopyText}
+                copiedMsgId={copiedMsgId}
+              />
             ))}
 
-            {/* ANIMATED CLINICAL THINKING STATE */}
+            {/* ANIMATED CLINICAL THINKING STATE / SKELETON */}
             {isLoading && (
-              <div className="flex gap-3 items-start animate-fade-in">
-                <div className="w-8 h-8 rounded-xl bg-sage/15 border border-sage/30 text-sage flex items-center justify-center shrink-0 shadow-[0_0_10px_var(--glow-sage)]">
-                  <Bot size={16} />
-                </div>
-                <div className="bg-bg-card/70 border border-light rounded-3xl p-4 text-xs text-sage flex items-center gap-3 backdrop-blur-xl">
-                  <div className="w-2.5 h-2.5 rounded-full bg-sage animate-ping" />
-                  <span className="font-mono font-medium">{thinkingStep}</span>
-                </div>
+              <div className="pt-2 animate-fade-in">
+                {thinkingStep?.toLowerCase().includes('assessment') ? (
+                  <AssessmentSkeleton currentStep={thinkingStep} />
+                ) : (
+                  <TypingIndicator step={thinkingStep} onStop={handleStopGeneration} />
+                )}
               </div>
             )}
           </div>
@@ -611,10 +678,10 @@ const MultiRagChatPage = () => {
           {showScrollBottom && (
             <button
               onClick={scrollToBottom}
-              className="absolute bottom-28 right-8 z-30 p-2.5 rounded-full bg-bg-card border border-sage text-sage shadow-lg hover:scale-110 transition-transform cursor-pointer"
+              className="absolute bottom-28 right-8 z-30 p-2 rounded-[6px] bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--clinical-teal)] shadow-md hover:bg-[var(--bg-surface)] transition-all cursor-pointer"
               title="Scroll to latest message"
             >
-              <ArrowDown size={16} />
+              <ArrowDown size={15} />
             </button>
           )}
 
@@ -640,25 +707,25 @@ const MultiRagChatPage = () => {
                   return (
                     <div
                       key={fileObj.id}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-bg-card/90 border border-light text-xs text-primary relative overflow-hidden group shadow-sm"
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-[6px] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] relative overflow-hidden group shadow-sm"
                     >
                       {/* Upload Progress Line */}
                       {fileObj.status === 'uploading' && (
                         <div
-                          className="absolute bottom-0 left-0 h-0.5 bg-sage transition-all duration-150"
+                          className="absolute bottom-0 left-0 h-0.5 bg-[var(--clinical-teal)] transition-all duration-150"
                           style={{ width: `${fileObj.progress}%` }}
                         />
                       )}
 
                       {isImg && fileObj.previewUrl ? (
-                        <img src={fileObj.previewUrl} alt="Thumbnail" className="w-5 h-5 rounded object-cover" />
+                        <img src={fileObj.previewUrl} alt="Thumbnail" className="w-5 h-5 rounded-[4px] object-cover" />
                       ) : (
-                        <FileText size={14} className="text-sage shrink-0" />
+                        <FileText size={14} className="text-[var(--clinical-teal)] shrink-0" />
                       )}
 
                       <div className="flex flex-col min-w-0">
                         <span className="truncate max-w-[120px] font-medium leading-tight">{fileObj.name}</span>
-                        <span className="text-[9px] text-subdued font-mono">
+                        <span className="text-[9px] text-[var(--text-muted)] font-mono">
                           {fileObj.status === 'uploading' ? `${fileObj.progress}%` : formatFileSize(fileObj.size)}
                         </span>
                       </div>
@@ -667,7 +734,7 @@ const MultiRagChatPage = () => {
                         <button
                           type="button"
                           onClick={() => handleRetryUpload(fileObj.id)}
-                          className="text-rose-400 hover:text-rose-300 p-0.5 cursor-pointer ml-1"
+                          className="text-[var(--severity-emergency)] hover:opacity-80 p-0.5 cursor-pointer ml-1"
                           title="Retry Upload"
                         >
                           <RotateCcw size={12} />
@@ -676,7 +743,7 @@ const MultiRagChatPage = () => {
                         <button
                           type="button"
                           onClick={() => handleRemoveFile(fileObj.id)}
-                          className="text-subdued hover:text-rose-400 p-0.5 cursor-pointer ml-1"
+                          className="text-[var(--text-muted)] hover:text-[var(--severity-emergency)] p-0.5 cursor-pointer ml-1"
                           title="Remove File"
                         >
                           <X size={12} />
@@ -724,16 +791,16 @@ const MultiRagChatPage = () => {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="relative flex items-end gap-2 bg-bg-card/90 border border-light focus-within:border-sage/50 rounded-3xl p-3 shadow-modal backdrop-blur-2xl transition-all"
+              className="relative flex items-end gap-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] focus-within:border-[var(--clinical-teal)] rounded-xl p-2.5 shadow-sm transition-all"
             >
               {/* Paperclip File Upload Trigger */}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="p-2.5 rounded-2xl text-subdued hover:text-sage hover:bg-bg-surface transition-colors cursor-pointer shrink-0 focus-visible:outline-2 focus-visible:outline-sage"
+                className="p-2 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer shrink-0 focus-visible:outline-2 focus-visible:outline-[var(--clinical-teal)]"
                 title="Attach Medical Report / Photo (PDF, Images)"
               >
-                <Paperclip size={18} />
+                <Paperclip size={16} />
               </button>
 
               {/* Textarea Input */}
@@ -748,80 +815,88 @@ const MultiRagChatPage = () => {
                     handleSendMessage();
                   }
                 }}
-                placeholder="Ask BluCare+ anything... (Press Enter to send, Shift+Enter for newline)"
-                className="flex-1 bg-transparent text-sm text-primary placeholder:text-subdued outline-none resize-none py-1.5 max-h-40 overflow-y-auto leading-relaxed"
+                placeholder="Describe symptoms or ask clinical questions... (Enter to send, Shift+Enter for newline)"
+                className="flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none resize-none py-1.5 max-h-40 overflow-y-auto leading-relaxed"
               />
 
               {/* Microphone Voice Button */}
               <button
                 type="button"
                 onClick={toggleVoiceRecording}
-                className={`p-2.5 rounded-2xl transition-colors cursor-pointer shrink-0 focus-visible:outline-2 focus-visible:outline-lavender ${
+                className={`p-2 rounded-md transition-colors cursor-pointer shrink-0 focus-visible:outline-2 focus-visible:outline-[var(--clinical-cyan)] ${
                   isRecording
                     ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse'
-                    : 'text-subdued hover:text-lavender hover:bg-bg-surface'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
                 }`}
                 title={isRecording ? 'Stop Voice Recording' : 'Start Voice Dictation'}
               >
-                {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
+                {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
               </button>
 
               {/* Send Button */}
-              <GlowButton
+              <button
                 type="submit"
                 disabled={isLoading || (!inputQuery.trim() && attachedFiles.length === 0)}
-                size="sm"
-                className="rounded-2xl px-4 py-2 shrink-0"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-[var(--accent-primary)] text-[#101316] font-medium text-xs hover:bg-[var(--accent-hover)] active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed shrink-0 cursor-pointer shadow-sm"
               >
                 <span>Send</span>
-                <Send size={15} />
-              </GlowButton>
+                <Send size={13} />
+              </button>
             </form>
           </div>
         </div>
 
         {/* Slide-Out Clinical Citation Reference Drawer */}
         {showCitationDrawer && (
-          <div className="lg:col-span-4 h-full overflow-y-auto animate-slide-in">
-            <GlassCard className="space-y-4 p-5">
-              <div className="flex items-center justify-between pb-3 border-b border-light">
-                <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
-                  <FileSearch size={16} className="text-lavender shrink-0" /> Clinical Citations
+          <div className="lg:col-span-4 h-full overflow-y-auto animate-fade-in">
+            <div className="space-y-4 p-4 rounded-[10px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <FileSearch size={16} className="text-[var(--clinical-teal)] shrink-0" /> Clinical Citations
                 </h3>
                 <button
                   onClick={() => setShowCitationDrawer(false)}
-                  className="text-subdued hover:text-primary text-xs cursor-pointer focus-visible:outline-2 focus-visible:outline-sage"
+                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xs cursor-pointer"
                 >
                   Close
                 </button>
               </div>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-1.5">
-                  <p className="font-semibold text-sage">{selectedCitation?.title || 'WHO Primary Care Guidelines'}</p>
-                  <p className="text-subdued font-mono text-[10px]">Reference ID: {selectedCitation?.id || 'WHO-2026-04'}</p>
-                  <p className="text-secondary mt-2 leading-relaxed">
-                    "Standard primary care diagnostic criteria for upper respiratory symptom management, hydration guidance, and temperature monitoring."
-                  </p>
+                <div className="p-3.5 rounded-[8px] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] space-y-1.5">
+                  <p className="font-semibold text-[var(--clinical-teal)]">{selectedCitation?.title || 'Clinical Guideline Reference'}</p>
+                  <p className="text-[var(--text-muted)] font-mono text-[10px]">Reference ID: {selectedCitation?.id || selectedCitation?.ref_id || 'DOC-REF'}</p>
+                  {selectedCitation?.tag && (
+                    <p className="text-[var(--text-muted)] text-[11px]">Publisher: {selectedCitation.tag}</p>
+                  )}
+                  {selectedCitation?.snippet && (
+                    <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
+                      "{selectedCitation.snippet}"
+                    </p>
+                  )}
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-2">
-                  <span className="font-semibold text-primary">Protocol Accordance</span>
-                  <div className="flex items-center gap-2 text-emerald-400">
-                    <CheckCircle2 size={16} className="shrink-0" /> Verified Clinical Alignment
+                <div className="p-3.5 rounded-[8px] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] space-y-2">
+                  <span className="font-semibold text-[var(--text-primary)]">Protocol Accordance</span>
+                  <div className="flex items-center gap-2 text-[var(--severity-routine)]">
+                    <CheckCircle2 size={16} className="shrink-0" /> Verified Clinical Evidence Alignment
                   </div>
                 </div>
 
-                <a
-                  href="https://who.int"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-lavender hover:underline text-xs pt-1 focus-visible:outline-2 focus-visible:outline-lavender"
-                >
-                  View Clinical Guideline Source <ExternalLink size={12} />
-                </a>
+                {selectedCitation?.url ? (
+                  <a
+                    href={selectedCitation.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[var(--clinical-teal)] hover:underline text-xs pt-1"
+                  >
+                    View Guideline Source <ExternalLink size={12} />
+                  </a>
+                ) : (
+                  <p className="text-[var(--text-muted)] text-[11px] pt-1">Indexed in verified clinical knowledge base.</p>
+                )}
               </div>
-            </GlassCard>
+            </div>
           </div>
         )}
       </div>

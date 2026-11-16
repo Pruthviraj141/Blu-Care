@@ -1,36 +1,32 @@
-// src/pages/SignUpPage.jsx - Custom Glassmorphic Sign Up Page
+// src/pages/SignUpPage.jsx - World-Class Authentication Portal
 import React from 'react';
 import { SignUp } from '@clerk/clerk-react';
 import { NavLink } from 'react-router-dom';
-import { ShieldCheck } from 'lucide-react';
+import { Activity, ShieldCheck } from 'lucide-react';
 
 const SignUpPage = () => {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-bg-base relative overflow-hidden p-4">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 right-1/2 translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-sage/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/3 w-80 h-80 rounded-full bg-lavender/10 blur-[100px] pointer-events-none" />
-
-      {/* Main Glassmorphic Container */}
-      <div className="w-full max-w-md z-10 space-y-6">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[var(--bg-app)] text-[var(--text-primary)] relative p-4 selection:bg-[var(--clinical-teal)]/20 selection:text-[var(--clinical-teal)]">
+      {/* Main Container */}
+      <div className="w-full max-w-md z-10 space-y-5">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <NavLink to="/" className="inline-flex items-center gap-2.5 no-underline group mb-2">
-            <div className="w-10 h-10 rounded-2xl bg-sage/15 border border-sage/30 text-sage flex items-center justify-center font-bold text-sm aspect-square shrink-0 shadow-[0_0_15px_var(--glow-sage)] group-hover:-translate-y-0.5 transition-all">
-              <div className="brand-dot shrink-0" />
+          <NavLink to="/" className="inline-flex items-center gap-2 no-underline group mb-1">
+            <div className="w-9 h-9 rounded-[8px] bg-[var(--clinical-teal)]/15 border border-[var(--clinical-teal)]/30 text-[var(--clinical-teal)] flex items-center justify-center font-bold text-sm aspect-square shrink-0 group-hover:bg-[var(--clinical-teal)]/25 transition-colors">
+              <Activity size={18} />
             </div>
-            <span className="text-primary font-bold text-2xl tracking-tight">
-              BluCare<span className="text-sage">+</span>
+            <span className="text-[var(--text-primary)] font-semibold text-2xl tracking-tight">
+              BluCare<span className="text-[var(--clinical-teal)]">+</span>
             </span>
           </NavLink>
 
-          <p className="text-xs text-subdued uppercase tracking-widest font-mono">
-            Create Your Medical Intelligence Account
+          <p className="text-xs text-[var(--text-muted)] font-mono uppercase tracking-wider">
+            Create Your Clinical Account
           </p>
         </div>
 
-        {/* Clerk Sign Up Box Wrapper */}
-        <div className="p-2 rounded-3xl bg-bg-surface/80 backdrop-blur-xl border border-light shadow-2xl flex justify-center">
+        {/* Clerk Sign Up Card Wrapper */}
+        <div className="p-3 sm:p-5 rounded-[12px] bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl flex justify-center">
           <SignUp
             routing="path"
             path="/sign-up"
@@ -39,29 +35,27 @@ const SignUpPage = () => {
             appearance={{
               elements: {
                 rootBox: 'w-full shadow-none bg-transparent',
-                card: 'bg-transparent shadow-none p-4 w-full border-none',
-                headerTitle: 'text-primary text-xl font-bold font-sans',
-                headerSubtitle: 'text-subdued text-xs font-sans',
-                socialButtonsBlockButton: 'bg-bg-card/70 border border-light text-primary hover:bg-bg-card text-xs font-medium rounded-xl',
-                socialButtonsBlockButtonText: 'text-primary font-medium text-xs',
-                dividerLine: 'bg-light',
-                dividerText: 'text-subdued text-xs uppercase tracking-widest',
-                formFieldLabel: 'text-secondary text-xs font-medium mb-1',
-                formFieldInput: 'bg-bg-card/80 border border-light text-primary rounded-xl text-sm focus:border-sage focus:ring-1 focus:ring-sage outline-none',
-                formButtonPrimary: 'bg-sage hover:brightness-110 text-bg-base font-semibold text-sm py-2.5 rounded-xl shadow-[0_0_20px_var(--glow-sage)] transition-all',
-                footerActionLink: 'text-sage hover:underline text-xs font-semibold',
-                footerActionText: 'text-subdued text-xs',
-                identityPreviewText: 'text-primary text-xs',
-                identityPreviewEditButton: 'text-sage text-xs',
+                card: 'bg-transparent shadow-none p-2 w-full border-none',
+                headerTitle: 'text-[var(--text-primary)] text-lg font-semibold font-sans',
+                headerSubtitle: 'text-[var(--text-secondary)] text-xs font-sans',
+                socialButtonsBlockButton: 'bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--border-strong)] text-xs font-medium rounded-[6px]',
+                socialButtonsBlockButtonText: 'text-[var(--text-primary)] font-medium text-xs',
+                dividerLine: 'bg-[var(--border-subtle)]',
+                dividerText: 'text-[var(--text-muted)] text-[10px] uppercase font-mono tracking-widest',
+                formFieldLabel: 'text-[var(--text-secondary)] text-xs font-medium mb-1',
+                formFieldInput: 'bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-[6px] text-sm focus:border-[var(--clinical-teal)] focus:ring-1 focus:ring-[var(--clinical-teal)] outline-none',
+                formButtonPrimary: 'bg-[var(--accent-primary)] text-[#101316] font-medium text-sm py-2 rounded-[6px] hover:bg-[var(--accent-hover)] active:bg-[#607d9b] transition-all shadow-sm',
+                footerActionLink: 'text-[var(--accent-primary)] hover:underline text-xs font-medium',
+                footerActionText: 'text-[var(--text-muted)] text-xs',
               },
             }}
           />
         </div>
 
-        {/* Clinical Disclaimer */}
-        <div className="flex items-center justify-center gap-1.5 text-[11px] text-subdued font-mono text-center">
-          <ShieldCheck size={14} className="text-sage shrink-0" />
-          <span>Encrypted Patient Data Isolation Standard</span>
+        {/* Security badge */}
+        <div className="flex items-center justify-center gap-1.5 text-[11px] font-mono text-[var(--text-muted)] text-center">
+          <ShieldCheck size={13} className="text-[var(--clinical-teal)]" />
+          <span>Encrypted HIPAA/GDPR Aligned Patient Authentication</span>
         </div>
       </div>
     </div>

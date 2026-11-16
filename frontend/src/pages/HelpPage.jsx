@@ -1,14 +1,13 @@
 // src/pages/HelpPage.jsx - Help & Safety Center
-import React, { useState } from 'react';
+import React from 'react';
 import PageContainer from '../components/ui/PageContainer';
 import SectionHeader from '../components/ui/SectionHeader';
 import AlertBanner from '../components/ui/AlertBanner';
-import GlassCard from '../components/ui/GlassCard';
-import { Mail, Phone, ChevronDown, ChevronUp } from 'lucide-react';
+import Card from '../components/common/Card';
+import Accordion from '../components/common/Accordion';
+import { Mail, Phone, ShieldCheck, HeartPulse, HelpCircle } from 'lucide-react';
 
 const HelpPage = () => {
-  const [openFaq, setOpenFaq] = useState(0);
-
   const faqs = [
     {
       q: 'How does BluCare+ ensure clinical safety during symptom assessments?',
@@ -20,11 +19,11 @@ const HelpPage = () => {
     },
     {
       q: 'Can I share my evaluation brief with my doctor?',
-      a: 'Absolutely. You can visit the Medical Journal section to export a structured PDF clinical brief formatted specifically for physician review.',
+      a: 'Absolutely. You can visit the consultation view or export structured clinical notes formatted specifically for physician review.',
     },
     {
       q: 'What should I do if I am experiencing a medical emergency?',
-      a: 'Do not rely solely on digital symptom assessments during an acute crisis. Use the Emergency SOS button in the top navigation bar or call local emergency medical services immediately (108 / 911).',
+      a: 'Do not rely solely on digital symptom assessments during an acute crisis. Use the Emergency SOS button in the navigation bar or call local emergency medical services immediately (108 / 911 / 112).',
     },
   ];
 
@@ -44,42 +43,50 @@ const HelpPage = () => {
       />
 
       <div className="space-y-4">
-        <h2 className="text-xl font-light text-primary">Frequently Asked Questions</h2>
-        <div className="space-y-3">
+        <h2 className="text-base sm:text-lg font-semibold text-[var(--text-primary)]">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-2.5">
           {faqs.map((faq, idx) => (
-            <GlassCard key={idx} hoverable onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)} className="space-y-2 cursor-pointer">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-primary">{faq.q}</h3>
-                {openFaq === idx ? <ChevronUp size={18} className="text-sage" /> : <ChevronDown size={18} className="text-subdued" />}
-              </div>
-              {openFaq === idx && (
-                <p className="text-xs text-secondary pt-2 border-t border-light leading-relaxed animate-fade-in">
-                  {faq.a}
-                </p>
-              )}
-            </GlassCard>
+            <Accordion
+              key={idx}
+              title={faq.q}
+              defaultOpen={idx === 0}
+            >
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed pt-2">
+                {faq.a}
+              </p>
+            </Accordion>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-        <GlassCard className="space-y-3">
-          <div className="flex items-center gap-2 text-lavender font-semibold text-sm">
-            <Mail size={18} /> Support Email
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <Card elevated bordered className="space-y-2.5 p-5">
+          <div className="flex items-center gap-2 text-[var(--clinical-teal)] font-semibold text-xs">
+            <Mail size={16} /> Support & Medical Queries
           </div>
-          <p className="text-xs text-subdued">Reach our clinical support team 24/7</p>
-          <a href="mailto:support@ragblucare.ai" className="text-sm text-sage font-medium hover:underline block">
+          <p className="text-xs text-[var(--text-muted)]">Reach our clinical support team 24/7</p>
+          <a
+            href="mailto:support@ragblucare.ai"
+            className="text-xs sm:text-sm text-[var(--clinical-teal)] font-medium hover:underline block"
+          >
             support@ragblucare.ai
           </a>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="space-y-3">
-          <div className="flex items-center gap-2 text-sage font-semibold text-sm">
-            <Phone size={18} /> Emergency Helpline
+        <Card elevated bordered className="space-y-2.5 p-5">
+          <div className="flex items-center gap-2 text-[var(--severity-emergency)] font-semibold text-xs">
+            <Phone size={16} /> Direct Emergency Helpline
           </div>
-          <p className="text-xs text-subdued">Direct emergency triage hotline</p>
-          <p className="text-sm text-primary font-medium">+91 94038 71129</p>
-        </GlassCard>
+          <p className="text-xs text-[var(--text-muted)]">24/7 Rapid ambulance & casualty triage</p>
+          <a
+            href="tel:108"
+            className="text-xs sm:text-sm text-[var(--severity-emergency)] font-bold hover:underline block"
+          >
+            Dial 108 (India) / 112 (Unified)
+          </a>
+        </Card>
       </div>
     </PageContainer>
   );

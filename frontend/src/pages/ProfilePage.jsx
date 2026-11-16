@@ -1,17 +1,20 @@
+// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import PageContainer from '../components/ui/PageContainer';
 import SectionHeader from '../components/ui/SectionHeader';
-import GlassCard from '../components/ui/GlassCard';
-import GlowButton from '../components/ui/GlowButton';
+import Card from '../components/common/Card';
+import Button from '../components/common/Button';
+import Badge from '../components/common/Badge';
 import { userApi } from '../utils/api';
 import { Phone, AlertCircle, CheckCircle2, Edit3, User, ShieldCheck } from 'lucide-react';
 
 const ProfilePage = () => {
   const { getToken } = useAuth();
+  const { user } = useUser();
   const [profile, setProfile] = useState({
-    name: 'Prashik K.',
-    email: 'prashik@ragblucare.ai',
+    name: user?.fullName || 'Patient',
+    email: user?.primaryEmailAddress?.emailAddress || 'patient@ragblucare.ai',
     phone: '+91 94038 71129',
     dob: 'October 14, 1998',
     bloodGroup: 'O Positive (O+)',
@@ -39,73 +42,89 @@ const ProfilePage = () => {
         description="Personal medical demographics, emergency contacts, and medical safety flags."
         tag="Account Workspace"
         actions={
-          <GlowButton size="md">
-            <Edit3 size={16} />
-            <span>Edit Profile</span>
-          </GlowButton>
+          <Button variant="secondary" size="sm" icon={Edit3}>
+            Edit Profile
+          </Button>
         }
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-8 space-y-6">
-          <GlassCard className="space-y-6">
-            <div className="flex items-center gap-4 pb-6 border-b border-light">
-              <div className="w-20 h-20 rounded-full bg-sage/15 border-2 border-sage/40 text-sage font-semibold text-3xl flex items-center justify-center shadow-[0_0_20px_var(--glow-sage)]">
-                P
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-8 space-y-5">
+          <Card elevated bordered className="space-y-5 p-5 sm:p-6">
+            <div className="flex items-center gap-4 pb-5 border-b border-[var(--border-subtle)]">
+              {user?.imageUrl ? (
+                <img
+                  src={user.imageUrl}
+                  alt={profile.name}
+                  className="w-16 h-16 rounded-[10px] border border-[var(--border-subtle)] object-cover"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-[10px] bg-[var(--clinical-teal)]/15 border border-[var(--clinical-teal)]/30 text-[var(--clinical-teal)] font-semibold text-2xl flex items-center justify-center">
+                  {profile.name.charAt(0)}
+                </div>
+              )}
               <div>
-                <h2 className="text-2xl font-medium text-primary">{profile.name}</h2>
-                <p className="text-xs text-subdued font-mono">Patient ID: BLU-2026-8902</p>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mt-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                  <CheckCircle2 size={12} /> HIPAA Verified Profile
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">{profile.name}</h2>
+                <p className="text-xs text-[var(--text-muted)] font-mono">Patient ID: BLU-2026-8902</p>
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 mt-2 rounded-[4px] bg-[var(--severity-routine)]/15 border border-[var(--severity-routine)]/30 text-[var(--severity-routine)] text-[11px] font-mono">
+                  <CheckCircle2 size={11} /> HIPAA Encrypted Record
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-1">
-                <span className="text-subdued uppercase tracking-wider font-semibold font-mono">Email Address</span>
-                <p className="text-primary font-medium text-sm">{profile.email}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-[6px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
+                <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">Email Address</span>
+                <p className="text-[var(--text-primary)] font-medium text-xs sm:text-sm">{profile.email}</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-1">
-                <span className="text-subdued uppercase tracking-wider font-semibold font-mono">Phone Number</span>
-                <p className="text-primary font-medium text-sm">{profile.phone}</p>
+              <div className="p-3 rounded-[6px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
+                <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">Phone Number</span>
+                <p className="text-[var(--text-primary)] font-medium text-xs sm:text-sm">{profile.phone}</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-1">
-                <span className="text-subdued uppercase tracking-wider font-semibold font-mono">Date of Birth</span>
-                <p className="text-primary font-medium text-sm">{profile.dob}</p>
+              <div className="p-3 rounded-[6px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
+                <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">Date of Birth</span>
+                <p className="text-[var(--text-primary)] font-medium text-xs sm:text-sm">{profile.dob}</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-bg-surface border border-light space-y-1">
-                <span className="text-subdued uppercase tracking-wider font-semibold font-mono">Blood Group</span>
-                <p className="text-sage font-medium text-sm">{profile.bloodGroup}</p>
+              <div className="p-3 rounded-[6px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
+                <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">Blood Group</span>
+                <p className="text-[var(--clinical-teal)] font-medium text-xs sm:text-sm">{profile.bloodGroup}</p>
               </div>
             </div>
-          </GlassCard>
+          </Card>
 
-          <GlassCard className="space-y-4">
-            <h3 className="text-base font-semibold text-primary flex items-center gap-2">
-              <AlertCircle size={18} className="text-rose-400" /> Allergies & Medical Safety Alerts
+          <Card elevated bordered className="space-y-3 p-5">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+              <AlertCircle size={16} className="text-[var(--severity-emergency)]" /> Allergies & Medical Safety Alerts
             </h3>
-            <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs space-y-2">
-              <span className="font-semibold text-rose-300">Known Drug Allergies</span>
-              <p className="text-secondary">{profile.allergies}</p>
+            <div className="p-3.5 rounded-[6px] bg-[var(--severity-emergency)]/10 border border-[var(--severity-emergency)]/25 text-xs space-y-1">
+              <span className="font-semibold text-[var(--severity-emergency)]">Known Drug Allergies</span>
+              <p className="text-[var(--text-secondary)]">{profile.allergies}</p>
             </div>
-          </GlassCard>
+          </Card>
         </div>
 
         <div className="lg:col-span-4 space-y-4">
-          <GlassCard className="space-y-4">
-            <h3 className="text-base font-semibold text-primary flex items-center gap-2">
-              <Phone size={18} className="text-sage" /> Primary Emergency Contact
+          <Card elevated bordered className="space-y-3 p-5">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+              <Phone size={16} className="text-[var(--clinical-teal)]" /> Primary Emergency Contact
             </h3>
-            <div className="p-4 rounded-2xl bg-bg-surface border border-light space-y-2 text-xs">
-              <p className="font-semibold text-primary">{profile.emergencyContact}</p>
-              <p className="text-subdued">Designated Next-of-Kin for Emergency SOS Triage</p>
+            <div className="p-3.5 rounded-[6px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1 text-xs">
+              <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">Kin / Contact</span>
+              <p className="font-medium text-[var(--text-primary)]">{profile.emergencyContact}</p>
             </div>
-            <GlowButton size="sm" variant="secondary" className="w-full">
-              Update Contact
-            </GlowButton>
-          </GlassCard>
+            <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
+              This contact is automatically notified if an emergency SOS event is triggered during triage.
+            </p>
+          </Card>
+
+          <Card elevated bordered className="space-y-2.5 p-5 text-xs text-[var(--text-secondary)]">
+            <div className="flex items-center gap-2 text-[var(--clinical-teal)] font-semibold text-xs">
+              <ShieldCheck size={16} /> Privacy & Data Rights
+            </div>
+            <p className="leading-relaxed">
+              Your patient demographics are retained strictly for clinical context within your private triage sessions. No third-party data tracking.
+            </p>
+          </Card>
         </div>
       </div>
     </PageContainer>
