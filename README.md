@@ -288,6 +288,20 @@ python -m unittest discover -s tests
 
 ---
 
+## 📚 Documentation & Technical Reports
+
+All technical architectural documents, RAG evaluations, clinical triage reasoning reports, performance benchmarks, and phase breakdown reports are consolidated in the [`docs/`](docs/) directory:
+
+- 📖 **[Documentation Catalog & Index](docs/README.md)**
+- 🏛️ **[Complete System Architecture](docs/BLUCARE_COMPLETE_SYSTEM_ARCHITECTURE.md)**
+- 🩺 **[Clinical Reasoning & Triage Engine](docs/BLUCARE_CONVERSATIONAL_CLINICAL_REASONING_REPORT.md)**
+- 🔍 **[RAG Quality & Evaluation Report](docs/BLUCARE_RAG_QUALITY_REPORT.md)**
+- ⚡ **[Redis Semantic Caching & Benchmarks](docs/REDIS_CACHE_IMPLEMENTATION.md)**
+- 🔭 **[Langfuse Tracing & Observability](docs/LANGFUSE_IMPLEMENTATION.md)**
+- 🎨 **[Design System & UI Components](docs/BLUCARE_DESIGN_SYSTEM.md)**
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
