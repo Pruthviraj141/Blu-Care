@@ -2,7 +2,11 @@ import unittest
 from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
+from app.core.config import settings
+
+settings.allow_dev_auth = True
+settings.app_env = "testing"
+client = TestClient(app, headers={"Authorization": "Bearer test_dev_token"})
 
 
 class TestBluCareAPI(unittest.TestCase):
@@ -36,11 +40,28 @@ class TestBluCareAPI(unittest.TestCase):
         self.assertIn("sessions", response.json())
 
     def test_api_v1_nearby_ambulances(self):
-        response = client.get("/api/v1/hospitals/nearby?lat=18.5204&lng=73.8567")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(data["latitude"], 18.5204)
-        self.assertGreater(len(data["providers"]), 0)
+        from unittest.mock import patch
+        with patch(
+            "app.facilities.service.HospitalScraper.scrape_facilities",
+            return_value=[
+                {
+                    "name": "Test Hospital",
+                    "latitude": 18.52,
+                    "longitude": 73.85,
+                    "facility_type": "hospital",
+                    "phone": "+91 98765 43210",
+                    "emergency": "yes",
+                    "source_url": "https://maps.google.com/?cid=123",
+                }
+            ],
+        ):
+            response = client.get("/api/v1/hospitals/nearby?lat=18.5204&lng=73.8567")
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data["latitude"], 18.5204)
+            self.assertIn("external_search", data)
+            self.assertIn("google_maps", data["external_search"])
+            self.assertGreater(len(data["providers"]), 0)
 
     def test_api_v1_user_profile(self):
         get_resp = client.get("/api/v1/user/profile")
