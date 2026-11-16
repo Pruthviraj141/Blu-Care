@@ -29,6 +29,105 @@
     --glow-sage: rgba(127, 225, 195, 0.4);
     --glow-lavender: rgba(182, 196, 255, 0.4);
     --glow-normal: rgba(143, 227, 176, 0.5);
+
+    /* Fallback tokens for clinical components */
+    --bg-app: #101316;
+    --bg-subtle: #191F25;
+    --bg-elevated: #2E3741;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.15);
+    --clinical-teal: #7696B5;
+    --clinical-cyan: #8AAAC9;
+    --accent-primary: #7696B5;
+    --accent-hover: #8AAAC9;
+    --text-muted: #727E8A;
+    --severity-emergency: #EF4444;
+    --severity-warning: #F59E0B;
+    --severity-urgent: #F59E0B;
+    --severity-routine: #7696B5;
+    --severity-selfcare: #8AAAC9;
+    --severity-info: #7696B5;
+}
+
+/* Clinical Workspace Scoped Tokens */
+.workspace-root {
+    --bg-base: #101316;
+    --bg-app: #101316;
+    --bg-subtle: #191F25;
+    --bg-surface: #252D35;
+    --bg-card: #252D35;
+    --bg-elevated: #2E3741;
+    --bg-input: #191F25;
+
+    --text-primary: #E8EDF2;
+    --text-secondary: #A1ABB6;
+    --text-muted: #727E8A;
+    --text-subdued: #727E8A;
+
+    --accent-primary: #7696B5;
+    --accent-hover: #8AAAC9;
+    --clinical-teal: #7696B5;
+    --clinical-cyan: #8AAAC9;
+
+    --severity-emergency: #EF4444;
+    --severity-warning: #F59E0B;
+    --severity-urgent: #F59E0B;
+    --severity-routine: #7696B5;
+    --severity-selfcare: #8AAAC9;
+    --severity-info: #7696B5;
+
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.15);
+    --border-focus: #7696B5;
+}
+
+[data-theme="light"] .workspace-root {
+    --bg-base: #F5F7FA;
+    --bg-app: #F5F7FA;
+    --bg-subtle: #EBEFF5;
+    --bg-surface: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #F0F4F8;
+    --bg-input: #FFFFFF;
+
+    --text-primary: #101316;
+    --text-secondary: #3B4652;
+    --text-muted: #677584;
+    --text-subdued: #677584;
+
+    --accent-primary: #476685;
+    --accent-hover: #334D66;
+    --clinical-teal: #476685;
+    --clinical-cyan: #334D66;
+
+    --severity-emergency: #DC2626;
+    --severity-warning: #D97706;
+    --severity-urgent: #D97706;
+    --severity-routine: #476685;
+    --severity-selfcare: #334D66;
+    --severity-info: #476685;
+
+    --border-light: rgba(16, 19, 22, 0.08);
+    --border-subtle: rgba(16, 19, 22, 0.08);
+    --border-strong: rgba(16, 19, 22, 0.16);
+    --border-focus: #476685;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Scrollbar & Focus System */
