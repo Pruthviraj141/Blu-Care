@@ -1,20 +1,36 @@
 // src/components/navigation/TopHeader.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, Plus, Sparkles, Menu, ShieldAlert, User, Settings, HelpCircle, ChevronDown, LogOut } from 'lucide-react';
+import {
+  Sun,
+  Moon,
+  Plus,
+  Activity,
+  Menu,
+  ShieldAlert,
+  User,
+  Settings,
+  HelpCircle,
+  ChevronDown,
+  LogOut,
+  PhoneCall,
+  ExternalLink,
+} from 'lucide-react';
 import { useNavigate, useParams, useLocation, NavLink } from 'react-router-dom';
 import { useUser, useClerk } from '@clerk/clerk-react';
 import { getSessionById, createSession } from '../../utils/chatStorage';
 import { useToast } from '../../contexts/ToastContext';
+import Button from '../common/Button';
+import IconButton from '../common/IconButton';
 
 const routeLabels = {
-  '/app/chat': 'AI Healthcare Assistant',
-  '/app/hospitals': 'Ambulance Assistance (SOS)',
-  '/app/profile': 'Patient Profile',
-  '/app/settings': 'Care Protocol Settings',
-  '/app/help': 'Help & Safety Center',
+  '/app/chat': 'Clinical Intake & Triage',
+  '/app/hospitals': 'Verified Facilities & Emergency SOS',
+  '/app/profile': 'Patient Profile & Medical History',
+  '/app/settings': 'Care Protocol & AI Sensitivity',
+  '/app/help': 'Help & Safety Documentation',
 };
 
-const TopHeader = ({ isCollapsed, setIsCollapsed }) => {
+const TopHeader = ({ isCollapsed, setIsCollapsed, onOpenMobileSidebar }) => {
   const [theme, setTheme] = useState(localStorage.getItem('blucare_theme') || 'dark');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -27,9 +43,9 @@ const TopHeader = ({ isCollapsed, setIsCollapsed }) => {
   const { signOut } = useClerk();
 
   const currentSession = sessionId ? getSessionById(sessionId) : null;
-  const activeLabel = routeLabels[location.pathname] || (currentSession ? currentSession.title : 'AI Healthcare Assistant');
+  const activeLabel = routeLabels[location.pathname] || (currentSession ? currentSession.title : 'Clinical Intake & Triage');
 
-  const displayName = user?.fullName || user?.firstName || 'Authenticated Patient';
+  const displayName = user?.fullName || user?.firstName || 'Patient';
   const displayEmail = user?.primaryEmailAddress?.emailAddress || 'patient@ragblucare.ai';
   const avatarUrl = user?.imageUrl;
 
@@ -57,7 +73,7 @@ const TopHeader = ({ isCollapsed, setIsCollapsed }) => {
     const newSess = createSession('New Health Consultation');
     window.dispatchEvent(new Event('blucare_sessions_updated'));
     navigate(`/app/chat/${newSess.id}`);
-    addToast('New conversation initialized', 'info');
+    addToast('New consultation initialized', 'info');
   };
 
   const handleSignOut = async () => {
@@ -67,132 +83,130 @@ const TopHeader = ({ isCollapsed, setIsCollapsed }) => {
   };
 
   return (
-    <header className="w-full h-16 shrink-0 bg-nav-bg/90 backdrop-blur-xl border-b border-light flex items-center justify-between px-4 sm:px-6 relative z-30">
+    <header className="w-full h-14 shrink-0 bg-[var(--bg-app)]/90 backdrop-blur-md border-b border-[var(--border-subtle)] flex items-center justify-between px-3 sm:px-6 relative z-30">
       {/* Left: Mobile Sidebar Toggle & Location Title */}
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-2.5 min-w-0">
+        {/* Mobile menu button */}
         <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 rounded-xl text-subdued hover:text-primary hover:bg-bg-card/50 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-sage"
-          title="Toggle Navigation Sidebar"
-          aria-label="Toggle Navigation Sidebar"
+          type="button"
+          onClick={onOpenMobileSidebar}
+          className="md:hidden p-1.5 rounded-[5px] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
+          title="Open Consultations History"
+          aria-label="Open Consultations History"
         >
           <Menu size={18} />
         </button>
 
+        {/* Current Context / Breadcrumb */}
         <div className="flex items-center gap-2 min-w-0">
-          <NavLink
-            to="/"
-            className="w-6 h-6 rounded-lg bg-sage/15 border border-sage/30 text-sage flex items-center justify-center shrink-0 hover:scale-105 transition-transform cursor-pointer"
-            title="BluCare+ Home (Public Landing)"
-          >
-            <Sparkles size={12} />
-          </NavLink>
-          <h1 className="text-sm font-semibold text-primary truncate max-w-xs sm:max-w-md md:max-w-lg">
+          <div className="w-2 h-2 rounded-full bg-[var(--clinical-teal)] shrink-0 hidden sm:inline-block" />
+          <h1 className="text-xs sm:text-sm font-medium text-[var(--text-primary)] truncate tracking-tight">
             {activeLabel}
           </h1>
         </div>
       </div>
 
-      {/* Right Actions: SOS, New Chat, Theme Toggle, Account Menu */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-        {/* Emergency SOS Button */}
-        <button
-          onClick={() => navigate('/app/hospitals')}
-          className="px-2.5 sm:px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-500 hover:text-white transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(244,63,94,0.2)] shrink-0 focus-visible:outline-2 focus-visible:outline-rose-400"
-          title="Emergency Care & Ambulance Assistance"
+      {/* Right Cluster: Emergency 108, New Consultation, Theme Toggle, Profile Menu */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Emergency SOS Shortcut */}
+        <a
+          href="tel:108"
+          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] bg-[var(--severity-emergency)]/15 border border-[var(--severity-emergency)]/30 text-[var(--severity-emergency)] text-[11px] font-mono font-semibold hover:bg-[var(--severity-emergency)]/25 transition-colors no-underline"
+          title="Direct Emergency Ambulance Dial (108)"
         >
-          <ShieldAlert size={14} />
-          <span className="hidden sm:inline">Emergency SOS</span>
-        </button>
+          <PhoneCall size={12} className="animate-pulse" />
+          <span>SOS 108</span>
+        </a>
 
-        {/* New Chat Quick Action */}
-        <button
+        {/* Quick New Chat Button (Desktop) */}
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={handleNewChat}
-          className="px-3 py-1.5 rounded-full bg-sage/10 border border-sage/30 text-sage hover:bg-sage hover:text-bg-base transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_var(--glow-sage)]"
-          title="Start New Chat"
+          icon={Plus}
+          className="hidden lg:inline-flex text-xs h-8"
         >
-          <Plus size={14} />
-          <span className="hidden sm:inline">New Chat</span>
-        </button>
+          New Chat
+        </Button>
 
-        {/* Theme Switcher Button */}
-        <button
+        {/* Theme Toggle */}
+        <IconButton
+          icon={theme === 'light' ? Moon : Sun}
           onClick={toggleTheme}
-          className="p-2 rounded-xl text-subdued hover:text-lavender hover:bg-bg-card/50 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-sage"
-          title="Toggle Dark / Light Theme"
-          aria-label="Toggle Dark / Light Theme"
-        >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
+          variant="ghost"
+          size="sm"
+          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+        />
 
-        {/* User Account Menu Dropdown */}
-        <div className="relative pl-1 border-l border-light" ref={dropdownRef}>
+        {/* User Profile Popover */}
+        <div className="relative" ref={dropdownRef}>
           <button
+            type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex items-center gap-2 p-1 rounded-full hover:bg-bg-card/60 transition-colors cursor-pointer group focus-visible:outline-2 focus-visible:outline-sage"
-            title="Account Options"
+            className="flex items-center gap-2 p-1 rounded-[6px] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer select-none"
+            aria-expanded={isMenuOpen}
           >
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={displayName}
-                className="w-8 h-8 rounded-full border border-sage/30 object-cover shadow-[0_0_10px_var(--glow-sage)] group-hover:scale-105 transition-transform"
+                className="w-7 h-7 rounded-full border border-[var(--border-subtle)] object-cover shrink-0"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-sage/15 border border-sage/30 text-sage flex items-center justify-center font-semibold text-xs shadow-[0_0_10px_var(--glow-sage)] group-hover:scale-105 transition-transform">
+              <div className="w-7 h-7 rounded-full bg-[var(--clinical-teal)]/20 text-[var(--clinical-teal)] flex items-center justify-center font-semibold text-xs shrink-0">
                 {displayName.charAt(0)}
               </div>
             )}
-            <ChevronDown size={14} className="text-subdued group-hover:text-primary transition-colors hidden sm:block" />
+            <ChevronDown
+              size={14}
+              className={`text-[var(--text-muted)] transition-transform duration-200 hidden sm:block ${
+                isMenuOpen ? 'rotate-180' : ''
+              }`}
+            />
           </button>
 
-          {/* Dropdown Menu Container */}
+          {/* Dropdown Menu */}
           {isMenuOpen && (
-            <div className="absolute right-0 top-12 w-60 bg-bg-card/95 border border-light rounded-2xl shadow-modal backdrop-blur-2xl p-2 z-50 animate-fade-in space-y-1">
-              <div className="px-3 py-2 border-b border-light mb-1">
-                <p className="text-xs font-semibold text-primary truncate">{displayName}</p>
-                <p className="text-[10px] text-subdued font-mono truncate">{displayEmail}</p>
+            <div className="absolute right-0 mt-2 w-56 rounded-[8px] bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl p-1.5 text-xs text-[var(--text-primary)] z-50 animate-fade-in">
+              <div className="px-2.5 py-2 border-b border-[var(--border-subtle)] mb-1">
+                <p className="font-medium text-[var(--text-primary)] truncate">{displayName}</p>
+                <p className="text-[11px] text-[var(--text-muted)] font-mono truncate">{displayEmail}</p>
               </div>
 
-              <button
-                onClick={() => {
-                  navigate('/app/profile');
-                  setIsMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-secondary hover:text-primary hover:bg-sage/10 transition-colors cursor-pointer text-left"
+              <NavLink
+                to="/app/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-[5px] hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
               >
-                <User size={15} className="text-sage" />
+                <User size={14} />
                 <span>Patient Profile</span>
-              </button>
+              </NavLink>
 
-              <button
-                onClick={() => {
-                  navigate('/app/settings');
-                  setIsMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-secondary hover:text-primary hover:bg-sage/10 transition-colors cursor-pointer text-left"
+              <NavLink
+                to="/app/settings"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-[5px] hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
               >
-                <Settings size={15} className="text-lavender" />
+                <Settings size={14} />
                 <span>Care Settings</span>
-              </button>
+              </NavLink>
 
-              <button
-                onClick={() => {
-                  navigate('/app/help');
-                  setIsMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-secondary hover:text-primary hover:bg-sage/10 transition-colors cursor-pointer text-left"
+              <NavLink
+                to="/app/help"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-[5px] hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
               >
-                <HelpCircle size={15} className="text-subdued" />
-                <span>Help & Safety Center</span>
-              </button>
+                <HelpCircle size={14} />
+                <span>Help & Protocols</span>
+              </NavLink>
 
-              <div className="pt-1 border-t border-light">
+              <div className="pt-1 mt-1 border-t border-[var(--border-subtle)]">
                 <button
+                  type="button"
                   onClick={handleSignOut}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer text-left font-medium"
+                  className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-[5px] hover:bg-[var(--severity-emergency)]/15 text-[var(--severity-emergency)] transition-colors text-left cursor-pointer"
                 >
-                  <LogOut size={15} />
+                  <LogOut size={14} />
                   <span>Sign Out</span>
                 </button>
               </div>

@@ -170,6 +170,19 @@ export const chatApi = {
       ...options,
     }),
 
+  executeAction: (threadId, actionId, conditionId, coords = {}, options = {}) =>
+    request('/session/action', {
+      method: 'POST',
+      body: {
+        thread_id: threadId,
+        action_id: actionId,
+        condition_id: conditionId,
+        latitude: coords?.latitude ?? null,
+        longitude: coords?.longitude ?? null,
+      },
+      ...options,
+    }),
+
   listSessions: (options = {}) =>
     request('/session/list', { method: 'GET', ...options }),
 
@@ -229,6 +242,19 @@ export const healthApi = {
 };
 
 export const hospitalsApi = {
+  getNearbyFacilities: (lat, lng, category = 'all', condition = null, radiusKm = 5, options = {}) => {
+    let opts = options;
+    let rKm = radiusKm;
+    if (typeof radiusKm === 'object' && radiusKm !== null) {
+      opts = radiusKm;
+      rKm = 5;
+    }
+    let url = `/hospitals/nearby?lat=${lat}&lng=${lng}&category=${encodeURIComponent(category)}&radius_km=${rKm}`;
+    if (condition) {
+      url += `&condition=${encodeURIComponent(condition)}`;
+    }
+    return request(url, { method: 'GET', ...opts });
+  },
   getNearbyAmbulances: (lat, lng, options = {}) =>
     request(`/hospitals/nearby?lat=${lat}&lng=${lng}`, { method: 'GET', ...options }),
 };
