@@ -1,0 +1,244 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-11-12",
+  "total_cases": 12,
+  "cases": [
+    {
+      "case_id": "TC-TH-01",
+      "user_question": "What are the common clinical characteristics of a tension-type headache?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Tension-type headache is characterized by a dull, non-throbbing, band-like pain around the head or neck. Pain severity is usually mild to moderate (scale 2-6/10) lasting from hours to several days, without systemic features like severe vomiting or photophobia with aura.",
+      "expected_facts": [
+        "band-like pain",
+        "dull non-throbbing",
+        "mild to moderate severity",
+        "lacks severe vomiting and aura"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-TH-02",
+      "user_question": "I have had a tight band around my forehead for 2 days. It feels dull and aching. How should I care for it at home?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Evidence-based home supportive care for tension headache includes maintaining adequate hydration, resting in a quiet environment, practicing neck muscle relaxation, and avoiding prolonged screen exposure.",
+      "expected_facts": [
+        "adequate hydration",
+        "quiet environment rest",
+        "neck relaxation",
+        "screen avoidance"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-MIG-01",
+      "user_question": "What symptoms distinguish acute migraine from ordinary headaches?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "Migraine typically presents as a recurrent, unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia (light sensitivity), or phonophobia (sound sensitivity).",
+      "expected_facts": [
+        "unilateral throbbing pulsating",
+        "lasts 4 to 72 hours",
+        "nausea or vomiting",
+        "photophobia or phonophobia"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-MIG-02",
+      "user_question": "I have a throbbing pain on the left side of my head, feeling sick to my stomach, and lights hurt my eyes. What non-drug steps can help?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "First-line supportive self-care includes resting in a quiet, dark room, maintaining adequate fluid intake, and applying a cold compress to the forehead or neck.",
+      "expected_facts": [
+        "quiet dark room",
+        "adequate fluid intake",
+        "cold compress to forehead or neck"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-URI-03",
+      "user_question": "What red-flag signs mean a sore throat is dangerous and requires emergency medical care?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Red-flag signs requiring immediate emergency medical care include inability to swallow liquids, drooling, stridor (high-pitched wheezing during inhalation), or high persistent fever exceeding 102\u00b0F.",
+      "expected_facts": [
+        "inability to swallow liquids",
+        "drooling",
+        "stridor wheezing on inhalation",
+        "fever > 102F"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Red-flag warning signs include inability to swallow liquids, drooling, stridor (wheezing during inhalation), or high persistent fever > 102F."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-GE-01",
+      "user_question": "What is the primary clinical objective when managing acute viral gastroenteritis?",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "The primary clinical objective is preventing dehydration through the administration of Oral Rehydration Solution (ORS) or electrolyte replacement fluids taken in frequent, small sips.",
+      "expected_facts": [
+        "preventing dehydration",
+        "oral rehydration solution ORS",
+        "frequent small sips",
+        "electrolyte replacement"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "The primary clinical objective is preventing dehydration. Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-AYU-FEV-01",
+      "user_question": "What is the traditional Ayurvedic classification and diet for acute mild fever?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "In Ayurveda, acute mild fever is classified as Jwara. Supportive diet emphasizes Langhana (light, easily digestible foods like rice gruel / yavagu, avoiding heavy or oily foods) and boiled herbal waters such as Shadanga Paniya.",
+      "expected_facts": [
+        "Jwara classification",
+        "Langhana light diet",
+        "rice gruel or yavagu",
+        "Shadanga Paniya",
+        "avoid heavy oily food"
+      ],
+      "expected_document_ids": [
+        "AYU-FEVER-JWARA-01"
+      ],
+      "reference_contexts": [
+        "In Ayurvedic clinical practice, acute mild fever is classified as Jwara. Traditional supportive care emphasizes Langhana (light, easily digestible diet such as rice gruel / yavagu, avoiding heavy or oily foods), drinking Shadanga Paniya (water boiled with dried ginger and nut grass), and fresh Tulsi (Ocimum sanctum) or Giloy (Tinospora cordifolia / Guduchi) decoctions."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-KASA-01",
+      "user_question": "What traditional Ayurvedic home remedies are used for throat irritation and cough (Kasa)?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Ayurvedic care for cough (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi).",
+      "expected_facts": [
+        "Kasa",
+        "warm water with fresh ginger",
+        "turmeric warm water gargles",
+        "holy basil Tulsi tea"
+      ],
+      "expected_document_ids": [
+        "AYU-RESPIRATORY-KASA-02"
+      ],
+      "reference_contexts": [
+        "Traditional Ayurvedic care for upper respiratory distress and throat irritation (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi) for soothing mucosal inflammation."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-DIFF-01",
+      "user_question": "How do I tell if my headache is a tension headache or a migraine?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Tension headaches are typically bilateral, dull, non-throbbing band-like ache of mild-to-moderate intensity without severe vomiting or aura. Migraines are usually unilateral, pulsating or throbbing, moderate-to-severe, and accompanied by nausea, vomiting, photophobia, or phonophobia.",
+      "expected_facts": [
+        "tension is bilateral dull band-like",
+        "migraine is unilateral throbbing pulsating",
+        "migraine has nausea photophobia aura",
+        "tension lacks systemic features"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01",
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck.",
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-REPH-01",
+      "user_question": "My head feels like it is in a vice grip. No sick feeling, just steady pressure around the temples. Started this morning.",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "A vice-grip or band-like steady pressure around temples without nausea describes a tension-type headache. Recommended care includes resting in a quiet space, hydration, and neck relaxation.",
+      "expected_facts": [
+        "vice grip matches band-like pressure",
+        "tension headache",
+        "rest in quiet space",
+        "hydration"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-OOC-01",
+      "user_question": "I have severe pain in my lower right abdomen near the hip bone, with nausea and loss of appetite. What is the diagnosis?",
+      "clinical_topic": "Abdominal / Surgery (Out of Corpus)",
+      "reference_answer": "Evidence is insufficient in our medical knowledge base regarding acute lower right quadrant abdominal pain (suspected appendicitis). This requires immediate in-person emergency surgical evaluation.",
+      "expected_facts": [
+        "insufficient evidence in medical knowledge base",
+        "in-person emergency evaluation required",
+        "suspected appendicitis not covered"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-EMERG-01",
+      "user_question": "I suddenly got the worst headache of my life 10 minutes ago, like an explosion in my brain, and my neck is stiffening up.",
+      "clinical_topic": "Neurology / Emergency Triage",
+      "reference_answer": "This sudden, explosive 'thunderclap' headache with neck stiffness is a critical medical emergency (possible subarachnoid hemorrhage). Do not attempt home care. Call emergency medical services (108/911) immediately.",
+      "expected_facts": [
+        "thunderclap headache is emergency",
+        "call emergency services immediately 108/911",
+        "possible subarachnoid hemorrhage",
+        "do not attempt home care"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    }
+  ]
+}

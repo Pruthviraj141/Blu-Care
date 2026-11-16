@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "BluCare+ Complete User Request Lifecycle",
+    "output": ".archify/02-request-lifecycle.html",
+    "viewBox": [1180, 680],
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "user", "type": "external", "label": "Patient", "sublabel": "Browser / UI" },
+    { "id": "fe", "type": "frontend", "label": "React Frontend", "sublabel": "MultiRagChatPage" },
+    { "id": "gw", "type": "backend", "label": "FastAPI Gateway", "sublabel": "POST /session/message" },
+    { "id": "auth", "type": "security", "label": "Clerk Auth", "sublabel": "JWT / Bearer token" },
+    { "id": "safety", "type": "security", "label": "SafetyEngine", "sublabel": "Deterministic Red-Flags" },
+    { "id": "svc", "type": "backend", "label": "SessionService", "sublabel": "DB Session & Cache" },
+    { "id": "graph", "type": "backend", "label": "LangGraph Engine", "sublabel": "11-Node Workflow" },
+    { "id": "rag", "type": "database", "label": "Qdrant + Rerank", "sublabel": "BGE Dense + CrossEncoder" },
+    { "id": "llm", "type": "cloud", "label": "Groq LLM", "sublabel": "ChatGroq qwen3.6-27b" },
+    { "id": "db", "type": "database", "label": "PostgreSQL / SQLite", "sublabel": "Persistence & Audit" }
+  ],
+  "segments": [
+    { "from": 150, "to": 260, "label": "1. Ingress & Auth" },
+    { "from": 270, "to": 430, "label": "2. Safety, Extraction & RAG Pipeline" },
+    { "from": 440, "to": 600, "label": "3. Validation, Persistence & Return" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "user", "to": "fe", "y": 165, "label": "Enter symptom 'throbbing headache 2 days'", "variant": "default" },
+    { "id": "m2", "from": "fe", "to": "gw", "y": 190, "label": "POST /api/v1/session/message (thread_id, text)", "variant": "emphasis" },
+    { "id": "m3", "from": "gw", "to": "auth", "y": 215, "label": "Verify JWT Bearer token", "variant": "security" },
+    { "id": "m4", "from": "auth", "to": "gw", "y": 240, "label": "Verified user_id ('user_abc')", "variant": "return" },
+    { "id": "m5", "from": "gw", "to": "svc", "y": 275, "label": "process_message_async(thread_id, msg)", "variant": "emphasis" },
+    { "id": "m6", "from": "svc", "to": "safety", "y": 300, "label": "evaluate(msg) -> Emergency Rule Scan", "variant": "security" },
+    { "id": "m7", "from": "safety", "to": "svc", "y": 325, "label": "is_emergency: false (no red flags)", "variant": "return" },
+    { "id": "m8", "from": "svc", "to": "graph", "y": 355, "label": "invoke(WorkflowState, config=trace)", "variant": "emphasis" },
+    { "id": "m9", "from": "graph", "to": "rag", "y": 385, "label": "retrieve(dense_query, fetch_k=20)", "variant": "default" },
+    { "id": "m10", "from": "rag", "to": "graph", "y": 415, "label": "Top-5 reranked medical guidelines", "variant": "return" },
+    { "id": "m11", "from": "graph", "to": "llm", "y": 445, "label": "Synthesize assessment (evidence context)", "variant": "emphasis" },
+    { "id": "m12", "from": "llm", "to": "graph", "y": 475, "label": "Grounded assessment JSON + citations", "variant": "return" },
+    { "id": "m13", "from": "graph", "to": "db", "y": 505, "label": "Persist validated assessment & update session", "variant": "emphasis" },
+    { "id": "m14", "from": "graph", "to": "svc", "y": 535, "label": "Return finalized WorkflowState", "variant": "return" },
+    { "id": "m15", "from": "svc", "to": "gw", "y": 555, "label": "Format ChatMessageResponse", "variant": "return" },
+    { "id": "m16", "from": "gw", "to": "fe", "y": 575, "label": "HTTP 200 { message, stage, sources, actions }", "variant": "emphasis" },
+    { "id": "m17", "from": "fe", "to": "user", "y": 595, "label": "Render clinical summary & action buttons", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "fe", "from": 165, "to": 600, "type": "frontend" },
+    { "participant": "gw", "from": 190, "to": 580, "type": "backend" },
+    { "participant": "auth", "from": 215, "to": 245, "type": "security" },
+    { "participant": "svc", "from": 275, "to": 560, "type": "backend" },
+    { "participant": "safety", "from": 300, "to": 330, "type": "security" },
+    { "participant": "graph", "from": 355, "to": 540, "type": "backend" },
+    { "participant": "rag", "from": 385, "to": 420, "type": "database" },
+    { "participant": "llm", "from": 445, "to": 480, "type": "cloud" },
+    { "participant": "db", "from": 505, "to": 520, "type": "database" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ingress & Zero-Token Safety",
+      "items": [
+        "Every request is protected by Clerk JWT token authentication",
+        "Deterministic SafetyEngine evaluates emergency keywords before calling LLM",
+        "If red flag is triggered, system short-circuits with emergency ER instructions"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "RAG & Grounded Synthesis",
+      "items": [
+        "Qdrant performs cosine similarity dense search with BGE Small embeddings",
+        "CrossEncoder reranker scores candidate passages on CPU",
+        "Groq LLM synthesizes assessment bound strictly to retrieved clinical context"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Citation Verification & Delivery",
+      "items": [
+        "CitationValidator inspects all [MED-xxx] tokens against verified sources",
+        "TriageAssessment is persisted in relational database with versioning",
+        "Frontend renders interactive diagnosis, supportive actions, and maps"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+user_input,retrieved_contexts,response,reference,faithfulness,answer_relevancy,context_precision,context_recall,case_id,clinical_topic,case_category,expected_sufficiency,retrieval_duration_s,generation_duration_s,retrieved_doc_ids,expected_doc_ids,citation_valid,is_insufficient_evidence,error,failure_reasons,is_failure
+What are the common clinical characteristics of a tension-type headache?,"['Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: Patient reports a headache. No additional symptoms, onset timing, severity, or associated features are provided.
+
+**Possible Conditions**:
+
+- **Tension-Type Headache** (Evidence: [S1]): The patient presents with a headache without reported systemic features (e.g., vomiting, photophobia) or focal neurological signs, matching the typical presentation of tension-type headache described as dull, non‑throbbing, band‑like pain of mild‑to‑moderate severity lasting hours to days.
+
+- **Migraine without Aura** (Evidence: [S2]): Migraine can present with headache alone, but typical features include unilateral throbbing pain and associated nausea, photophobia, or phonophobia. Absence of these reported features makes migraine less certain, yet it remains a differential.
+
+**Recommended Actions**:
+
+- Maintain adequate hydration and rest in a quiet environment. ([S1]): Supported for tension-type headache as basic supportive care.
+
+- Practice neck muscle relaxation and limit prolonged screen exposure. ([S1]): Specific recommendations for tension-type headache management.
+
+- Rest in a quiet, dark room, ensure fluid intake, and apply a cold compress to the forehead or neck. ([S2]): First‑line self‑care for migraine as per guidelines.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Sudden thunderclap onset of headache
+
+- Fever with neck stiffness
+
+- Headache following head trauma
+
+- Hemiplegia or other focal neurological deficits
+
+- Confusion, speech difficulties, or visual loss","Tension-type headache is characterized by a dull, non-throbbing, band-like pain around the head or neck. Pain severity is usually mild to moderate (scale 2-6/10) lasting from hours to several days, without systemic features like severe vomiting or photophobia with aura.",0.5384615384615384,0.7209397287905103,0.9999999999,1.0,TC-TH-01,Neurology / Headache,direct_knowledge,sufficient,4.3623,3.0369,"MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02",MED-TENSION-HEADACHE-01,True,False,,Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+I have had a tight band around my forehead for 2 days. It feels dull and aching. How should I care for it at home?,"['Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: Patient reports a headache lasting 2 days. No additional symptoms are reported.
+
+**Possible Conditions**:
+
+- **Tension-Type Headache** (Evidence: [MED-TENSION-HEADACHE-01]): The headache has persisted for several days, which aligns with tension-type headache that can last from hours to several days. The absence of systemic features (e.g., vomiting, photophobia, aura) matches the typical presentation of tension-type headache as described in the evidence.
+
+- **Migraine without Aura** (Evidence: [MED-MIGRAINE-WITHOUT-AURA-02]): Migraine can present with headache lasting up to 72 hours, but typical features include unilateral throbbing pain and associated nausea, photophobia, or phonophobia, which the patient has not reported.
+
+**Recommended Actions**:
+
+- Maintain adequate hydration. ([MED-TENSION-HEADACHE-01]): Hydration is an evidence‑based supportive measure for tension-type headache.
+
+- Rest in a quiet environment and limit screen exposure. ([MED-TENSION-HEADACHE-01]): Rest and avoidance of prolonged screen exposure are recommended supportive care for tension-type headache.
+
+- Perform neck muscle relaxation techniques. ([MED-TENSION-HEADACHE-01]): Neck muscle relaxation is part of the supportive care for tension-type headache.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Sudden thunderclap onset of headache
+
+- Fever with neck stiffness
+
+- Headache following head trauma","Evidence-based home supportive care for tension headache includes maintaining adequate hydration, resting in a quiet environment, practicing neck muscle relaxation, and avoiding prolonged screen exposure.",0.7647058823529411,0.6537717319769428,0.9999999999,1.0,TC-TH-02,Neurology / Headache,symptom_triage,sufficient,1.6608,3.6086,"MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02",MED-TENSION-HEADACHE-01,True,False,,Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+What symptoms distinguish acute migraine from ordinary headaches?,"['Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.', 'Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.']","**Case Summary**: The patient is asking for information on which symptoms differentiate an acute migraine from ordinary (non-migraine) headaches.
+
+**Possible Conditions**:
+
+- **Migraine without aura** (Evidence: [MED-MIGRAINE-WITHOUT-AURA-02]): Migraine typically presents as a unilateral, throbbing or pulsating headache of moderate-to-severe intensity lasting 4 to 72 hours, and is frequently accompanied by nausea, vomiting, photophobia, or phonophobia.
+
+- **Tension‑type headache** (Evidence: [MED-TENSION-HEADACHE-01]): Tension‑type headache is described as a dull, non‑throbbing, band‑like pain around the head or neck, usually mild‑to‑moderate in severity, lasting hours to several days, and lacks systemic features such as severe vomiting, focal neurological signs, photophobia, or aura.
+
+**Recommended Actions**:
+
+- Rest in a quiet, dark room, maintain adequate fluid intake, and apply a cold compress to the forehead or neck. ([MED-MIGRAINE-WITHOUT-AURA-02]): These self‑care measures are first‑line for migraine and help alleviate pain and associated symptoms.
+
+- Ensure adequate hydration, rest in a quiet environment, and perform neck muscle relaxation techniques; limit prolonged screen exposure. ([MED-TENSION-HEADACHE-01]): These supportive measures are recommended for tension‑type headache and address its typical triggers.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Hemiplegia, confusion, speech difficulties, or visual loss (urgent medical care for migraine).
+
+- Sudden thunderclap onset, fever with neck stiffness, or headache following head trauma (requires physician evaluation).","Migraine typically presents as a recurrent, unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia (light sensitivity), or phonophobia (sound sensitivity).",0.0,0.9842735440437447,0.99999999995,1.0,TC-MIG-01,Neurology / Migraine,direct_knowledge,sufficient,0.9668,2.8334,"MED-MIGRAINE-WITHOUT-AURA-02, MED-TENSION-HEADACHE-01",MED-MIGRAINE-WITHOUT-AURA-02,True,False,,Unsupported generation claim (Faithfulness < 0.80).,True
+"I have a throbbing pain on the left side of my head, feeling sick to my stomach, and lights hurt my eyes. What non-drug steps can help?","['Acute viral gastroenteritis is characterized by sudden onset nausea, vomiting, watery diarrhea, and low-grade abdominal cramps. The primary clinical objective is preventing dehydration. Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips. Avoid sugary juices or fatty foods. Emergency warning signs: signs of severe dehydration (lethargy, dry mouth, absence of urination for 8+ hours), persistent vomiting preventing fluid retention, high fever, or blood in stool.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: The patient reports nausea as a present symptom; no other symptoms are provided.
+
+**Possible Conditions**:
+
+- **Acute viral gastroenteritis** (Evidence: [S1]): Nausea is listed as a characteristic manifestation of acute viral gastroenteritis (S1).
+
+- **Migraine without aura** (Evidence: [S2]): Nausea can accompany migraine attacks (S2).
+
+**Recommended Actions**:
+
+- Administer oral rehydration solution (ORS) in frequent, small sips. ([S1]): ORS is recommended to prevent dehydration in acute viral gastroenteritis (S1).
+
+- Avoid sugary juices and fatty foods. ([S1]): These foods may worsen symptoms in viral gastroenteritis (S1).
+
+- Rest in a quiet, dark room and apply a cold compress to the forehead or neck. ([S2]): These self‑care measures are first‑line for migraine-associated nausea (S2).
+
+- Maintain adequate fluid intake. ([S1], [S2]): Adequate hydration is advised for both viral gastroenteritis and migraine (S1, S2).
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Lethargy, dry mouth, or absence of urination for >8 hours (severe dehydration) (S1)
+
+- Persistent vomiting preventing fluid retention (S1)
+
+- High fever (S1)
+
+- Blood in stool (S1)
+
+- Hemiplegia, confusion, speech difficulties, or visual loss (S2)","First-line supportive self-care includes resting in a quiet, dark room, maintaining adequate fluid intake, and applying a cold compress to the forehead or neck.",0.0,0.654279831445896,0.99999999995,1.0,TC-MIG-02,Neurology / Migraine,symptom_triage,sufficient,1.2178,2.7766,"MED-ACUTE-GASTROENTERITIS-04, MED-MIGRAINE-WITHOUT-AURA-02",MED-MIGRAINE-WITHOUT-AURA-02,True,False,,Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+What red-flag signs mean a sore throat is dangerous and requires emergency medical care?,"['Influenza is characterized by acute abrupt onset of fever, chills, pronounced fatigue and body weakness, cough, and sore throat lasting 3 to 7 days. First-line supportive care includes strict bed rest, high fluid intake, and droplet isolation. Patients should seek urgent medical evaluation if experiencing chest pain, dyspnea, cyanosis, or rapid decompensation.', 'Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days. Most episodes are self-limiting. Recommended supportive care includes warm salt water gargles, oral hydration, honey for cough relief (in patients > 1 year old), and rest. Red-flag warning signs include inability to swallow liquids, drooling, stridor (wheezing during inhalation), or high persistent fever > 102F.', 'Acute bronchitis involves inflammation of the large airways, typically manifesting as persistent cough (with or without sputum) lasting up to 2-3 weeks following an upper respiratory viral illness. Antibiotics are generally not recommended for uncomplicated acute bronchitis. Supportive measures: steam inhalation, hydration, honey, and rest. Immediate medical evaluation is warranted if the patient develops shortness of breath at rest, chest pain, hemoptysis (coughing blood), or symptoms persisting beyond 3 weeks.']","**Case Summary**: The patient reports a sore throat. No additional symptoms, onset timing, severity, or associated features are provided.
+
+**Possible Conditions**:
+
+- **Viral Pharyngitis (Common Cold)** (Evidence: [MED-VIRAL-PHARYNGITIS-03]): Sore throat is a hallmark symptom of viral pharyngitis and common cold syndromes, which typically present with a scratchy throat, nasal congestion, low‑grade fever, and cough lasting 3‑7 days.
+
+- **Influenza** (Evidence: [MED-INFLUENZA-08]): Influenza commonly includes sore throat among other acute symptoms such as fever, chills, fatigue, cough, and body weakness lasting 3‑7 days.
+
+**Recommended Actions**:
+
+- Warm salt water gargles several times daily ([MED-VIRAL-PHARYNGITIS-03]): Supported as a recommended supportive measure for viral pharyngitis and common cold syndromes.
+
+- Maintain adequate oral hydration and rest ([MED-VIRAL-PHARYNGITIS-03], [MED-INFLUENZA-08]): Both viral pharyngitis and influenza guidelines advise oral hydration and rest as core supportive care.
+
+- High fluid intake and strict bed rest ([MED-INFLUENZA-08]): First‑line supportive care for influenza includes strict bed rest and high fluid intake.
+
+- Practice droplet isolation (stay home, avoid close contact with others) ([MED-INFLUENZA-08]): Influenza guidance recommends droplet isolation to limit transmission.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Inability to swallow liquids or drooling
+
+- Stridor (wheezing on inhalation)
+
+- High persistent fever > 102°F (38.9°C)
+
+- Chest pain, dyspnea, cyanosis, or rapid decompensation
+
+- Severe sore throat with progressive swelling","Red-flag signs requiring immediate emergency medical care include inability to swallow liquids, drooling, stridor (high-pitched wheezing during inhalation), or high persistent fever exceeding 102°F.",0.0,0.7978003409807656,0.0,0.0,TC-URI-03,Infectious Disease / Respiratory,emergency_safety,sufficient,0.9278,3.1987,"MED-INFLUENZA-08, MED-VIRAL-PHARYNGITIS-03, MED-ACUTE-BRONCHITIS-05",MED-VIRAL-PHARYNGITIS-03,True,False,,CrossEncoder ranking failure: top ranked document 'MED-INFLUENZA-08' is not the primary expected target. | Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80). | Context recall below threshold: retrieved evidence incomplete relative to reference.,True
+What is the primary clinical objective when managing acute viral gastroenteritis?,"['Acute viral gastroenteritis is characterized by sudden onset nausea, vomiting, watery diarrhea, and low-grade abdominal cramps. The primary clinical objective is preventing dehydration. Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips. Avoid sugary juices or fatty foods. Emergency warning signs: signs of severe dehydration (lethargy, dry mouth, absence of urination for 8+ hours), persistent vomiting preventing fluid retention, high fever, or blood in stool.']","**Case Summary**: Reported What is the primary clinical objective when managing acute viral gastroenteritis?.
+
+**Possible Conditions**:
+
+- **Clinical Assessment of Acute Diarrhea and Viral Gastroenteritis** (Evidence: [MED-ACUTE-GASTROENTERITIS-04]): Symptoms are consistent with evidence documented in WHO Primary Care Triage Guidelines.
+
+**Recommended Actions**:
+
+- Rest, maintain fluid intake, and consult a medical professional. ([MED-ACUTE-GASTROENTERITIS-04]): Supported by clinical protocol Clinical Assessment of Acute Diarrhea and Viral Gastroenteritis.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- If symptoms worsen rapidly or you develop difficulty breathing or severe pain, visit the nearest emergency department.","The primary clinical objective is preventing dehydration through the administration of Oral Rehydration Solution (ORS) or electrolyte replacement fluids taken in frequent, small sips.",0.0,0.0,0.0,0.0,TC-GE-01,Gastroenterology / Infection,direct_knowledge,sufficient,0.0378,1.8624,MED-ACUTE-GASTROENTERITIS-04,MED-ACUTE-GASTROENTERITIS-04,True,False,,Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80). | Context recall below threshold: retrieved evidence incomplete relative to reference.,True
+What is the traditional Ayurvedic classification and diet for acute mild fever?,"['In Ayurvedic clinical practice, acute mild fever is classified as Jwara. Traditional supportive care emphasizes Langhana (light, easily digestible diet such as rice gruel / yavagu, avoiding heavy or oily foods), drinking Shadanga Paniya (water boiled with dried ginger and nut grass), and fresh Tulsi (Ocimum sanctum) or Giloy (Tinospora cordifolia / Guduchi) decoctions. Safety & Contraindications: Herbal decoctions are contraindicated in pregnancy without specialist supervision. Giloy must be used with caution in pre-existing liver disease. Traditional herbs are strictly complementary supportive wellness practices and DO NOT replace conventional medical care, diagnostic blood testing, or hospital triage for high, persistent, or worsening fevers. Never consume unverified metallic preparations.', 'Traditional Ayurvedic care for upper respiratory distress and throat irritation (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi) for soothing mucosal inflammation. Contraindications: Avoid pungent herbs in patients with active gastric ulcers or severe reflux. Honey is strictly contraindicated in infants under 1 year. This guidance is non-substitutive for medical attention if breathing difficulty, stridor, or high fever occurs.']",Error during synthesis: type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',"In Ayurveda, acute mild fever is classified as Jwara. Supportive diet emphasizes Langhana (light, easily digestible foods like rice gruel / yavagu, avoiding heavy or oily foods) and boiled herbal waters such as Shadanga Paniya.",0.0,0.0,0.0,0.0,TC-AYU-FEV-01,Complementary Medicine / Ayurveda,ayurvedic_guidance,sufficient,0.7892,0.0002,"AYU-FEVER-JWARA-01, AYU-RESPIRATORY-KASA-02",AYU-FEVER-JWARA-01,True,True,type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',Execution Error: type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',True
+What traditional Ayurvedic home remedies are used for throat irritation and cough (Kasa)?,"['Traditional Ayurvedic care for upper respiratory distress and throat irritation (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi) for soothing mucosal inflammation. Contraindications: Avoid pungent herbs in patients with active gastric ulcers or severe reflux. Honey is strictly contraindicated in infants under 1 year. This guidance is non-substitutive for medical attention if breathing difficulty, stridor, or high fever occurs.']",Error during synthesis: type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',"Ayurvedic care for cough (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi).",0.0,0.0,0.9999999999,1.0,TC-AYU-KASA-01,Complementary Medicine / Ayurveda,ayurvedic_guidance,sufficient,0.0649,0.0001,AYU-RESPIRATORY-KASA-02,AYU-RESPIRATORY-KASA-02,True,True,type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',Execution Error: type object 'EvidenceGroundedSynthesizer' has no attribute 'generate_ayurvedic_guidance',True
+How do I tell if my headache is a tension headache or a migraine?,"['Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: The patient reports a headache. No additional details (onset, duration, severity, associated symptoms) are provided.
+
+**Possible Conditions**:
+
+- **Tension-Type Headache** (Evidence: [S1]): The patient has a headache without reported systemic features (e.g., vomiting, photophobia, aura) which aligns with the typical presentation of tension-type headache described as dull, non‑throbbing, band‑like pain of mild‑to‑moderate severity lasting hours to days.
+
+- **Migraine (without aura)** (Evidence: [S2]): Migraine is a common cause of headache and can present with unilateral, throbbing pain lasting 4–72 hours. Although the patient has not reported typical associated symptoms (nausea, photophobia, phonophobia), migraine cannot be excluded without further detail.
+
+**Recommended Actions**:
+
+- Hydration and rest in a quiet environment ([S1]): Evidence‑based supportive care for tension‑type headache includes adequate hydration and rest in a quiet setting.
+
+- Neck muscle relaxation and avoidance of prolonged screen exposure ([S1]): Guidelines for tension‑type headache recommend neck muscle relaxation and limiting screen time to reduce muscle strain.
+
+- Rest in a dark, quiet room with optional cold compress to forehead or neck ([S2]): First‑line self‑care for migraine includes resting in a dark room, fluid intake, and applying a cold compress.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Sudden thunderclap onset of headache
+
+- Fever with neck stiffness
+
+- Headache following head trauma
+
+- Hemiplegia, confusion, speech difficulties, or visual loss
+
+**Evidence Limitations**:
+
+- The retrieved evidence does not provide information on the patient's headache duration, severity, or associated neurological symptoms, limiting definitive diagnosis.","Tension headaches are typically bilateral, dull, non-throbbing band-like ache of mild-to-moderate intensity without severe vomiting or aura. Migraines are usually unilateral, pulsating or throbbing, moderate-to-severe, and accompanied by nausea, vomiting, photophobia, or phonophobia.",0.46153846153846156,0.7019937602352089,0.99999999995,1.0,TC-DIFF-01,Neurology / Headache,differential_diagnosis,sufficient,1.0421,2.6813,"MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02","MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02",True,False,,Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+"My head feels like it is in a vice grip. No sick feeling, just steady pressure around the temples. Started this morning.","['Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: The patient reports a headache. No additional symptoms, onset timing, severity, or associated features are provided.
+
+**Possible Conditions**:
+
+- **Tension-Type Headache** (Evidence: [MED-TENSION-HEADACHE-01]): Tension-type headache is characterized by dull, non‑throbbing, band‑like pain around the head or neck and is typically mild‑to‑moderate in severity, lasting hours to days. The patient’s isolated headache without reported throbbing quality, unilateral location, nausea, photophobia, or aura aligns with this presentation.
+
+- **Migraine (without aura)** (Evidence: [MED-MIGRAINE-WITHOUT-AURA-02]): Migraine commonly presents with unilateral, throbbing or pulsating headache of moderate‑to‑severe intensity lasting 4–72 hours, often accompanied by nausea, vomiting, photophobia, or phonophobia. The patient’s report of a headache alone, without these associated features, makes migraine less certain but still a differential.
+
+**Recommended Actions**:
+
+- Maintain adequate hydration and rest in a quiet environment. ([MED-TENSION-HEADACHE-01]): Supportive care for tension-type headache includes hydration and rest in a quiet setting.
+
+- Apply a cold compress to the forehead or neck and limit screen exposure. ([MED-MIGRAINE-WITHOUT-AURA-02]): First‑line self‑care for migraine recommends a cold compress and rest in a quiet, dark room; limiting screen exposure also benefits tension-type headache.
+
+- Perform gentle neck muscle relaxation exercises. ([MED-TENSION-HEADACHE-01]): Neck muscle relaxation is recommended as part of home care for tension-type headache.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Sudden thunderclap onset of headache
+
+- Fever with neck stiffness
+
+- Headache following head trauma
+
+- New neurological deficits (e.g., weakness, vision loss, speech difficulty)
+
+**Evidence Limitations**:
+
+- The retrieved evidence does not provide guidance for headache presentations lacking detail on quality, location, or associated symptoms.","A vice-grip or band-like steady pressure around temples without nausea describes a tension-type headache. Recommended care includes resting in a quiet space, hydration, and neck relaxation.",0.0,0.0,0.0,1.0,TC-REPH-01,Neurology / Headache,symptom_triage,sufficient,0.4285,3.2013,"MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02",MED-TENSION-HEADACHE-01,True,False,,Context precision below threshold (relevant documents ranked too low). | Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+"I have severe pain in my lower right abdomen near the hip bone, with nausea and loss of appetite. What is the diagnosis?","['Acute viral gastroenteritis is characterized by sudden onset nausea, vomiting, watery diarrhea, and low-grade abdominal cramps. The primary clinical objective is preventing dehydration. Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips. Avoid sugary juices or fatty foods. Emergency warning signs: signs of severe dehydration (lethargy, dry mouth, absence of urination for 8+ hours), persistent vomiting preventing fluid retention, high fever, or blood in stool.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: The patient reports severe nausea. No other symptoms such as vomiting, diarrhea, abdominal pain, headache, photophobia, or phonophobia are reported.
+
+**Possible Conditions**:
+
+- **Acute viral gastroenteritis** (Evidence: [S1]): Acute viral gastroenteritis commonly presents with sudden onset nausea, which matches the patient's primary symptom. The evidence also notes vomiting and diarrhea, which are not reported, making the diagnosis less certain.
+
+- **Migraine without aura** (Evidence: [S2]): Migraine can be accompanied by nausea, which aligns with the patient's symptom. However, migraine typically includes a unilateral throbbing headache, which the patient has not reported, reducing certainty.
+
+**Recommended Actions**:
+
+- Administer oral rehydration solution (ORS) in frequent, small sips. ([S1]): ORS is recommended to prevent dehydration in acute viral gastroenteritis, which can present with nausea.
+
+- Avoid sugary juices and fatty foods. ([S1]): These foods can worsen gastrointestinal symptoms in viral gastroenteritis.
+
+- Rest in a quiet, dark environment and apply a cold compress to the forehead or neck. ([S2]): These self‑care measures are first‑line recommendations for migraine-associated nausea.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Lethargy, dry mouth, or inability to urinate for 8+ hours (signs of severe dehydration).
+
+- Persistent vomiting preventing fluid retention.
+
+- High fever or blood in stool.
+
+**Evidence Limitations**:
+
+- The evidence does not address isolated nausea without accompanying vomiting, diarrhea, or headache, limiting diagnostic certainty.",Evidence is insufficient in our medical knowledge base regarding acute lower right quadrant abdominal pain (suspected appendicitis). This requires immediate in-person emergency surgical evaluation.,0.0,0.0,0.0,0.0,TC-OOC-01,Abdominal / Surgery (Out of Corpus),out_of_corpus,insufficient,0.6709,2.7402,"MED-ACUTE-GASTROENTERITIS-04, MED-MIGRAINE-WITHOUT-AURA-02",,True,False,,Incorrect abstention: retrieved irrelevant documents for out-of-corpus query. | Context precision below threshold (relevant documents ranked too low). | Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True
+"I suddenly got the worst headache of my life 10 minutes ago, like an explosion in my brain, and my neck is stiffening up.","['Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days. Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura. Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure. Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma.', 'Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia. First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck. Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss.']","**Case Summary**: The patient reports a headache. No additional symptoms, onset timing, severity, or associated features are provided.
+
+**Possible Conditions**:
+
+- **Tension-Type Headache** (Evidence: [MED-TENSION-HEADACHE-01]): Tension-type headache presents as dull, non‑throbbing, band‑like pain around the head or neck, typically mild‑to‑moderate and lasting hours to days, without systemic features such as vomiting, focal neurological signs, or photophobia. The patient’s sole symptom is headache, which aligns with this description.
+
+- **Migraine (without aura)** (Evidence: [MED-MIGRAINE-WITHOUT-AURA-02]): Migraine typically causes unilateral, throbbing or pulsating moderate‑to‑severe headache lasting 4–72 hours, often with nausea, photophobia, or phonophobia. While the patient only reports headache, the lack of additional details does not exclude migraine, so it remains a differential.
+
+**Recommended Actions**:
+
+- Maintain adequate hydration and rest in a quiet environment. ([MED-TENSION-HEADACHE-01]): Supported for tension-type headache care (hydration, rest, quiet environment).
+
+- Perform neck muscle relaxation exercises and limit prolonged screen exposure. ([MED-TENSION-HEADACHE-01]): Specific supportive measures for tension-type headache.
+
+- Rest in a quiet, dark room and apply a cold compress to the forehead or neck. ([MED-MIGRAINE-WITHOUT-AURA-02]): First‑line self‑care for migraine according to NICE guidelines.
+
+**Warning Signs (Emergency Evaluation Required)**:
+
+- Sudden thunderclap onset of headache
+
+- Fever with neck stiffness
+
+- Headache following head trauma
+
+- Hemiplegia or other focal neurological deficits
+
+- Confusion, speech difficulties, or visual loss
+
+**Evidence Limitations**:
+
+- The retrieved evidence does not provide information on the patient’s headache duration, severity, or associated symptoms, limiting diagnostic certainty.","This sudden, explosive 'thunderclap' headache with neck stiffness is a critical medical emergency (possible subarachnoid hemorrhage). Do not attempt home care. Call emergency medical services (108/911) immediately.",0.0,0.0,0.0,0.0,TC-EMERG-01,Neurology / Emergency Triage,emergency_safety,emergency_abstention,0.3427,2.991,"MED-TENSION-HEADACHE-01, MED-MIGRAINE-WITHOUT-AURA-02",MED-TENSION-HEADACHE-01,True,False,,Context precision below threshold (relevant documents ranked too low). | Unsupported generation claim (Faithfulness < 0.80). | Irrelevant or insufficiently addressed response (Answer Relevancy < 0.80).,True

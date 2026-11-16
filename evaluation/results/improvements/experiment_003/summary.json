@@ -1,0 +1,135 @@
+{
+  "experiment": "blucare_improved_v3",
+  "timestamp": "2026-11-15T06:40:53.300841+00:00",
+  "total_cases": 12,
+  "failed_cases_count": 6,
+  "pass_rate": 0.5,
+  "overall_metrics": {
+    "faithfulness": 0.437,
+    "answer_relevancy": 0.7096,
+    "context_precision": 0.8333,
+    "context_recall": 0.7917
+  },
+  "latency": {
+    "avg_retrieval_duration_s": 2.1551,
+    "avg_generation_duration_s": 0.6898,
+    "total_avg_turn_s": 2.845
+  },
+  "configuration": {
+    "evaluator_model": "openai/gpt-oss-20b",
+    "evaluator_provider": "groq",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "reranker_model": "BAAI/bge-reranker-base",
+    "qdrant_collection": "medical_triage_kb",
+    "score_threshold": 0.7,
+    "fetch_k": 20,
+    "final_k": 5
+  },
+  "category_metrics": {
+    "ayurvedic_guidance": {
+      "count": 2,
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.9492,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "avg_retrieval_s": 3.1475,
+      "avg_generation_s": 0.7603
+    },
+    "differential_diagnosis": {
+      "count": 1,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.7526,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "avg_retrieval_s": 1.8626,
+      "avg_generation_s": 0.1938
+    },
+    "direct_knowledge": {
+      "count": 3,
+      "faithfulness": 0.6667,
+      "answer_relevancy": 0.858,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "avg_retrieval_s": 1.4431,
+      "avg_generation_s": 0.4276
+    },
+    "emergency_safety": {
+      "count": 2,
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.4842,
+      "context_precision": 0.5,
+      "context_recall": 0.5,
+      "avg_retrieval_s": 2.835,
+      "avg_generation_s": 0.4256
+    },
+    "out_of_corpus": {
+      "count": 1,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.5359,
+      "context_precision": 0.0,
+      "context_recall": 0.0,
+      "avg_retrieval_s": 0.0228,
+      "avg_generation_s": 0.0
+    },
+    "symptom_triage": {
+      "count": 3,
+      "faithfulness": 0.4148,
+      "answer_relevancy": 0.5952,
+      "context_precision": 1.0,
+      "context_recall": 0.8333,
+      "avg_retrieval_s": 2.5607,
+      "avg_generation_s": 1.4765
+    }
+  },
+  "topic_metrics": {
+    "Abdominal / Surgery (Out of Corpus)": {
+      "count": 1,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.5359,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "Complementary Medicine / Ayurveda": {
+      "count": 2,
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.9492,
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "Gastroenterology / Infection": {
+      "count": 1,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8697,
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "Infectious Disease / Respiratory": {
+      "count": 1,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9684,
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "Neurology / Emergency Triage": {
+      "count": 1,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "Neurology / Headache": {
+      "count": 4,
+      "faithfulness": 0.45,
+      "answer_relevancy": 0.729,
+      "context_precision": 1.0,
+      "context_recall": 0.875
+    },
+    "Neurology / Migraine": {
+      "count": 2,
+      "faithfulness": 0.2222,
+      "answer_relevancy": 0.6633,
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    }
+  }
+}

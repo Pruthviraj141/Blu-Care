@@ -23,6 +23,8 @@ dist/
 checkpoints.sqlite*
 *.env.local
 f.example
+dump.rdb
+qdrant_local_store/
 
 # OS & macOS
 .DS_Store

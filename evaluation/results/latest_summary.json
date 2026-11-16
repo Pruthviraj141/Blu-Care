@@ -1,0 +1,48 @@
+{
+  "experiment": "test_run",
+  "timestamp": "2026-11-15T17:15:00.070688+00:00",
+  "total_cases": 1,
+  "failed_cases_count": 0,
+  "pass_rate": 1.0,
+  "overall_metrics": {
+    "faithfulness": 0.95,
+    "answer_relevancy": 0.9,
+    "context_precision": 1.0,
+    "context_recall": 1.0
+  },
+  "latency": {
+    "avg_retrieval_duration_s": 0.45,
+    "avg_generation_duration_s": 1.2,
+    "total_avg_turn_s": 1.65
+  },
+  "configuration": {
+    "evaluator_model": "openai/gpt-oss-20b",
+    "evaluator_provider": "groq",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "reranker_model": "BAAI/bge-reranker-base",
+    "qdrant_collection": "medical_triage_kb",
+    "score_threshold": 0.7,
+    "fetch_k": 20,
+    "final_k": 5
+  },
+  "category_metrics": {
+    "symptom_triage": {
+      "count": 1,
+      "faithfulness": 0.95,
+      "answer_relevancy": 0.9,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "avg_retrieval_s": 0.45,
+      "avg_generation_s": 1.2
+    }
+  },
+  "topic_metrics": {
+    "Neurology / Headache": {
+      "count": 1,
+      "faithfulness": 0.95,
+      "answer_relevancy": 0.9,
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    }
+  }
+}

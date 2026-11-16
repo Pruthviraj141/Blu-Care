@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "BluCare+ Complete System Architecture",
+    "output": ".archify/01-system-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "Patient / User", "sublabel": "Web Browser / Mobile", "pos": [30, 240], "size": [130, 60] },
+    { "id": "frontend", "type": "frontend", "label": "React 19 Frontend", "sublabel": "Vite + Tailwind + Clerk", "pos": [190, 240], "size": [140, 60], "tag": ":5173" },
+    { "id": "clerk", "type": "security", "label": "Clerk Auth", "sublabel": "JWT / JWKS verification", "pos": [190, 90], "size": [140, 60], "tag": "OAuth / JWT" },
+    { "id": "gateway", "type": "backend", "label": "FastAPI Gateway", "sublabel": "Security + Correlation ID", "pos": [380, 240], "size": [150, 60], "tag": ":8000" },
+    { "id": "safety", "type": "security", "label": "SafetyEngine", "sublabel": "Deterministic Red-Flags", "pos": [380, 380], "size": [150, 60], "tag": "Zero LLM" },
+    { "id": "sessionsvc", "type": "backend", "label": "SessionService", "sublabel": "State & Cache Coordinator", "pos": [580, 240], "size": [150, 60] },
+    { "id": "graph", "type": "backend", "label": "LangGraph Engine", "sublabel": "Triage StateGraph + SQLite", "pos": [780, 240], "size": [160, 60], "tag": "11 Nodes" },
+    { "id": "facilities", "type": "backend", "label": "FacilitiesService", "sublabel": "Selenium Scraper + Haversine", "pos": [780, 380], "size": [160, 60], "tag": "Headless" },
+    { "id": "cache", "type": "database", "label": "Redis Cache", "sublabel": "Semantic Cache (optional)", "pos": [380, 520], "size": [150, 60], "tag": ":6379" },
+    { "id": "db", "type": "database", "label": "PostgreSQL / SQLite", "sublabel": "Sessions, Messages, Evals", "pos": [580, 520], "size": [150, 60], "tag": "SQLAlchemy" },
+    { "id": "qdrant", "type": "database", "label": "Qdrant Vector DB", "sublabel": "BGE 384d Cosine Index", "pos": [780, 520], "size": [160, 60], "tag": ":6333 / Disk" },
+    { "id": "reranker", "type": "backend", "label": "Cross-Encoder", "sublabel": "bge-reranker-base (CPU)", "pos": [1000, 240], "size": [150, 60], "tag": "Rerank Top-5" },
+    { "id": "groq", "type": "cloud", "label": "Groq LLM API", "sublabel": "qwen3.6-27b / llama-3", "pos": [1000, 380], "size": [150, 60], "tag": "ChatGroq" },
+    { "id": "langfuse", "type": "cloud", "label": "Langfuse / Smith", "sublabel": "Observability & Tracing", "pos": [780, 90], "size": [160, 60], "tag": "Telemetry" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "BluCare+ Application Backend", "wraps": ["gateway", "safety", "sessionsvc", "graph", "facilities"] },
+    { "kind": "security-group", "label": "Medical Intelligence & AI Providers", "wraps": ["reranker", "groq"] }
+  ],
+  "connections": [
+    { "id": "user-to-fe", "from": "user", "to": "frontend", "label": "HTTPS UI", "variant": "emphasis" },
+    { "id": "fe-to-clerk", "from": "frontend", "to": "clerk", "label": "auth session", "variant": "security" },
+    { "id": "fe-to-gw", "from": "frontend", "to": "gateway", "label": "Bearer JWT", "variant": "emphasis" },
+    { "id": "gw-verify-clerk", "from": "gateway", "to": "clerk", "label": "verify token", "variant": "security" },
+    { "id": "gw-to-safety", "from": "gateway", "to": "safety", "label": "red-flag check", "variant": "security" },
+    { "id": "gw-to-svc", "from": "gateway", "to": "sessionsvc", "label": "coordinate", "variant": "emphasis" },
+    { "id": "svc-to-cache", "from": "sessionsvc", "to": "cache", "label": "semantic lookup", "variant": "dashed" },
+    { "id": "svc-to-db", "from": "sessionsvc", "to": "db", "label": "persist state", "variant": "default" },
+    { "id": "svc-to-graph", "from": "sessionsvc", "to": "graph", "label": "invoke graph", "variant": "emphasis" },
+    { "id": "graph-to-qdrant", "from": "graph", "to": "qdrant", "label": "dense retrieve (k=20)", "variant": "default" },
+    { "id": "graph-to-rerank", "from": "graph", "to": "reranker", "label": "rerank (top 5)", "variant": "default" },
+    { "id": "graph-to-groq", "from": "graph", "to": "groq", "label": "synthesize triage", "variant": "emphasis" },
+    { "id": "graph-to-fac", "from": "graph", "to": "facilities", "label": "find clinics/hospitals", "variant": "dashed" },
+    { "id": "graph-to-obs", "from": "graph", "to": "langfuse", "label": "spans & evals", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Client & Ingress", "items": ["React 19 glassmorphic frontend with Clerk auth", "FastAPI gateway enforces CorrelationId and Security Headers", "Zero-LLM SafetyEngine checks emergency red flags upfront"] },
+    { "dot": "emerald", "title": "Orchestration & Data", "items": ["LangGraph 11-node state machine with SQLite checkpointing", "SessionService coordinates SQLAlchemy persistence and semantic caching", "FacilitiesService provides real-time GPS-based hospital scraping"] },
+    { "dot": "rose", "title": "RAG Intelligence", "items": ["BGE Small embeddings (384d) with cosine similarity in Qdrant", "CrossEncoder (bge-reranker-base) reranks top-20 candidates down to top-5", "ChatGroq synthesizes structured clinical assessment with citation validation"] }
+  ]
+}

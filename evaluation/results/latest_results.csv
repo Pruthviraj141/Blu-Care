@@ -1,0 +1,2 @@
+case_id,clinical_topic,case_category,expected_sufficiency,faithfulness,answer_relevancy,context_precision,context_recall,retrieval_duration_s,generation_duration_s,retrieved_doc_ids,expected_doc_ids,citation_valid,is_insufficient_evidence,error,failure_reasons,is_failure
+TEST-01,Neurology / Headache,symptom_triage,sufficient,0.95,0.9,1.0,1.0,0.45,1.2,MED-TENSION-HEADACHE-01,MED-TENSION-HEADACHE-01,True,False,,,False

@@ -1,0 +1,1224 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-11-12",
+  "total_cases": 62,
+  "corpus_documents": [
+    "MED-TENSION-HEADACHE-01",
+    "MED-MIGRAINE-WITHOUT-AURA-02",
+    "MED-VIRAL-PHARYNGITIS-03",
+    "MED-ACUTE-GASTROENTERITIS-04",
+    "MED-ACUTE-BRONCHITIS-05",
+    "MED-VIRAL-FEVER-06",
+    "MED-DENGUE-FEVER-07",
+    "MED-INFLUENZA-08",
+    "AYU-FEVER-JWARA-01",
+    "AYU-RESPIRATORY-KASA-02",
+    "AYU-HEADACHE-SHIRASHOOLA-03"
+  ],
+  "cases": [
+    {
+      "case_id": "TC-TH-01",
+      "user_question": "What are the common clinical characteristics of a tension-type headache?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Tension-type headache is characterized by a dull, non-throbbing, band-like pain around the head or neck. Pain severity is usually mild to moderate (scale 2-6/10) lasting from hours to several days, without systemic features like severe vomiting or photophobia with aura.",
+      "expected_facts": [
+        "band-like pain",
+        "dull non-throbbing",
+        "mild to moderate severity",
+        "lacks severe vomiting and aura"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck. Severity is typically mild to moderate (scale 2-6/10) lasting from hours to several days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-TH-02",
+      "user_question": "I have had a tight band around my forehead for 2 days. It feels dull and aching. How should I care for it at home?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Evidence-based home supportive care for tension headache includes maintaining adequate hydration, resting in a quiet environment, practicing neck muscle relaxation, and avoiding prolonged screen exposure.",
+      "expected_facts": [
+        "adequate hydration",
+        "quiet environment rest",
+        "neck relaxation",
+        "screen avoidance"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Evidence-based supportive care includes adequate hydration, rest in a quiet environment, neck muscle relaxation, and avoidance of prolonged screen exposure."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-TH-03",
+      "user_question": "What red flags or warning signs require urgent physician evaluation for a headache?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Warning signs requiring immediate physician evaluation include sudden severe 'thunderclap' onset, fever accompanied by neck stiffness, headache following head trauma, or focal neurological deficits.",
+      "expected_facts": [
+        "thunderclap sudden onset",
+        "fever with neck stiffness",
+        "head trauma",
+        "neurological signs"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-TH-04",
+      "user_question": "My head feels heavy and squeezing on both sides, but I do not have any nausea, vomiting, or visual disturbances.",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Bilateral squeezing headache without nausea, vomiting, or visual disturbance is consistent with tension-type headache rather than migraine. Recommended supportive care includes rest, hydration, and neck relaxation.",
+      "expected_facts": [
+        "tension-type headache consistent",
+        "absence of nausea and aura differentiates from migraine",
+        "rest and hydration"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01",
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Unlike migraine, it lacks systemic features like severe vomiting, focal neurological signs, or photophobia with aura.",
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-MIG-01",
+      "user_question": "What symptoms distinguish acute migraine from ordinary headaches?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "Migraine typically presents as a recurrent, unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia (light sensitivity), or phonophobia (sound sensitivity).",
+      "expected_facts": [
+        "unilateral throbbing pulsating",
+        "lasts 4 to 72 hours",
+        "nausea or vomiting",
+        "photophobia or phonophobia"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-MIG-02",
+      "user_question": "I have a throbbing pain on the left side of my head, feeling sick to my stomach, and lights hurt my eyes. What non-drug steps can help?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "First-line supportive self-care includes resting in a quiet, dark room, maintaining adequate fluid intake, and applying a cold compress to the forehead or neck.",
+      "expected_facts": [
+        "quiet dark room",
+        "adequate fluid intake",
+        "cold compress to forehead or neck"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "First-line self-care: rest in a quiet, dark room, adequate fluid intake, cold compress applied to the forehead or neck."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-MIG-03",
+      "user_question": "When should someone experiencing a migraine attack go to the emergency room immediately?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "Emergency evaluation is required if headache is accompanied by hemiplegia (one-sided weakness), confusion, speech difficulties, or sudden visual loss.",
+      "expected_facts": [
+        "hemiplegia",
+        "confusion",
+        "speech difficulties",
+        "visual loss"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Patients should seek urgent medical care if experiencing hemiplegia, confusion, speech difficulties, or visual loss."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-MIG-04",
+      "user_question": "How long does a typical migraine attack last according to clinical guidelines?",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "According to NICE clinical guidelines, a typical acute migraine attack lasts between 4 and 72 hours.",
+      "expected_facts": [
+        "4 to 72 hours",
+        "NICE guidelines"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-URI-01",
+      "user_question": "What are the common symptoms and natural duration of viral pharyngitis?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Viral pharyngitis typically presents with a scratchy or sore throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days. Most episodes are self-limiting.",
+      "expected_facts": [
+        "scratchy throat",
+        "nasal congestion",
+        "low-grade fever",
+        "lasts 3 to 7 days",
+        "self-limiting"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days. Most episodes are self-limiting."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-URI-02",
+      "user_question": "What supportive home care is recommended for a sore throat and scratchy cough?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Recommended supportive care includes warm salt water gargles, frequent oral hydration, honey for cough relief in individuals over 1 year of age, and rest.",
+      "expected_facts": [
+        "warm salt water gargles",
+        "oral hydration",
+        "honey (only if > 1 year)",
+        "rest"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Recommended supportive care includes warm salt water gargles, oral hydration, honey for cough relief (in patients > 1 year old), and rest."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-URI-03",
+      "user_question": "What red-flag signs mean a sore throat is dangerous and requires emergency medical care?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Red-flag signs requiring immediate emergency medical care include inability to swallow liquids, drooling, stridor (high-pitched wheezing during inhalation), or high persistent fever exceeding 102\u00b0F.",
+      "expected_facts": [
+        "inability to swallow liquids",
+        "drooling",
+        "stridor wheezing on inhalation",
+        "fever > 102F"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Red-flag warning signs include inability to swallow liquids, drooling, stridor (wheezing during inhalation), or high persistent fever > 102F."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-URI-04",
+      "user_question": "Can honey be given to an 8-month-old infant for cough relief?",
+      "clinical_topic": "Infectious Disease / Pediatrics",
+      "reference_answer": "No. Honey is strictly contraindicated in infants under 1 year of age due to the risk of infant botulism, and clinical guidelines recommend honey for cough relief only in patients older than 1 year.",
+      "expected_facts": [
+        "contraindicated in infants under 1 year",
+        "only for patients > 1 year old"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "honey for cough relief (in patients > 1 year old), and rest."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-GE-01",
+      "user_question": "What is the primary clinical objective when managing acute viral gastroenteritis?",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "The primary clinical objective is preventing dehydration through the administration of Oral Rehydration Solution (ORS) or electrolyte replacement fluids taken in frequent, small sips.",
+      "expected_facts": [
+        "preventing dehydration",
+        "oral rehydration solution ORS",
+        "frequent small sips",
+        "electrolyte replacement"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "The primary clinical objective is preventing dehydration. Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-GE-02",
+      "user_question": "I have had watery diarrhea and nausea since yesterday. What fluids and foods should I avoid?",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "You should avoid sugary juices and fatty foods as they can worsen diarrhea and gastrointestinal irritation. Focus on small, frequent sips of ORS or electrolyte fluids.",
+      "expected_facts": [
+        "avoid sugary juices",
+        "avoid fatty foods",
+        "use ORS or electrolyte fluids"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "Avoid sugary juices or fatty foods."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-GE-03",
+      "user_question": "What are the severe dehydration warning signs in acute diarrhea that require emergency care?",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "Emergency warning signs include lethargy, dry mouth, absence of urination for 8 or more hours, persistent vomiting preventing any fluid retention, high fever, or blood in stool.",
+      "expected_facts": [
+        "lethargy",
+        "dry mouth",
+        "absence of urination 8+ hours",
+        "persistent vomiting",
+        "blood in stool"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "Emergency warning signs: signs of severe dehydration (lethargy, dry mouth, absence of urination for 8+ hours), persistent vomiting preventing fluid retention, high fever, or blood in stool."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-GE-04",
+      "user_question": "My stomach is cramping and I have had 4 loose bowel movements today with low nausea. What should I drink right away?",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "Take frequent small sips of Oral Rehydration Solution (ORS) or electrolyte fluids to stay hydrated while avoiding sugary juices and greasy foods.",
+      "expected_facts": [
+        "ORS in frequent small sips",
+        "electrolyte replacement",
+        "prevent dehydration"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "Oral Rehydration Solution (ORS) or electrolyte replacement fluids should be administered in frequent, small sips. Avoid sugary juices or fatty foods."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-BRON-01",
+      "user_question": "How long does acute bronchitis cough typically persist, and are antibiotics routinely needed?",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "Acute bronchitis cough typically lasts up to 2 to 3 weeks following an upper respiratory viral illness. Routine antibiotics are generally not recommended for uncomplicated cases.",
+      "expected_facts": [
+        "lasts 2 to 3 weeks",
+        "antibiotics not recommended for uncomplicated cases",
+        "viral illness follow-up"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Acute bronchitis involves inflammation of the large airways, typically manifesting as persistent cough (with or without sputum) lasting up to 2-3 weeks following an upper respiratory viral illness. Antibiotics are generally not recommended for uncomplicated acute bronchitis."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-BRON-02",
+      "user_question": "I have had a lingering chest cough with clear phlegm for 10 days after a cold. What home care can ease my chest?",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "Recommended supportive measures for acute bronchitis include steam inhalation, ample oral hydration, honey for soothing throat and airway irritation, and rest.",
+      "expected_facts": [
+        "steam inhalation",
+        "hydration",
+        "honey",
+        "rest"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Supportive measures: steam inhalation, hydration, honey, and rest."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-BRON-03",
+      "user_question": "When should someone with acute bronchitis see a physician immediately?",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "Immediate medical evaluation is needed if the patient develops shortness of breath at rest, chest pain, hemoptysis (coughing up blood), or symptoms persisting beyond 3 weeks.",
+      "expected_facts": [
+        "shortness of breath at rest",
+        "chest pain",
+        "hemoptysis coughing blood",
+        "persisting beyond 3 weeks"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Immediate medical evaluation is warranted if the patient develops shortness of breath at rest, chest pain, hemoptysis (coughing blood), or symptoms persisting beyond 3 weeks."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-BRON-04",
+      "user_question": "Can I take amoxicillin or other antibiotics for my 5-day bronchitis cough?",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "Clinical guidelines (NICE) advise that antibiotics are generally not recommended for uncomplicated acute bronchitis because it is primarily viral and self-limiting.",
+      "expected_facts": [
+        "antibiotics generally not recommended",
+        "uncomplicated bronchitis is viral/self-limiting",
+        "NICE guidelines"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Antibiotics are generally not recommended for uncomplicated acute bronchitis."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-VF-01",
+      "user_question": "What is the typical clinical presentation and timeframe of acute viral fever?",
+      "clinical_topic": "Infectious Disease / Febrile Illness",
+      "reference_answer": "Acute viral fever typically presents with elevated body temperature, generalized malaise, muscle aches, and body weakness lasting 2 to 5 days without localized bacterial infection.",
+      "expected_facts": [
+        "elevated body temperature",
+        "generalized malaise and muscle aches",
+        "lasts 2 to 5 days",
+        "body weakness"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Acute viral fever presents with elevated body temperature, generalized malaise, muscle aches, and body weakness typically lasting 2 to 5 days without focal localized bacterial infection."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-VF-02",
+      "user_question": "I have had a mild fever (100.2 F) and body aches for 2 days. What supportive home care does WHO recommend?",
+      "clinical_topic": "Infectious Disease / Febrile Illness",
+      "reference_answer": "WHO guidelines recommend adequate fluid intake, oral electrolyte replacement, physical cooling with lukewarm sponging, and plenty of rest.",
+      "expected_facts": [
+        "adequate fluid intake",
+        "oral electrolyte replacement",
+        "lukewarm sponging",
+        "rest"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Supportive outpatient care focuses on adequate fluid intake, oral electrolyte replacement, physical cooling with lukewarm sponging, and rest."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-VF-03",
+      "user_question": "What warning signs in a viral fever necessitate immediate clinical escalation or emergency triage?",
+      "clinical_topic": "Infectious Disease / Febrile Illness",
+      "reference_answer": "Warning signs requiring immediate escalation include temperature above 102\u00b0F (38.9\u00b0C), persistent vomiting, severe headache with neck rigidity, shortness of breath, confusion, or absence of improvement after 3 days.",
+      "expected_facts": [
+        "temperature > 102F (38.9C)",
+        "persistent vomiting",
+        "neck rigidity",
+        "shortness of breath",
+        "confusion",
+        "no improvement after 3 days"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Warning signs requiring immediate clinical escalation include body temperature above 102F (38.9C), persistent vomiting, severe headache with neck rigidity, shortness of breath, confusion, or absence of improvement after 3 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-VF-04",
+      "user_question": "My fever has lasted 4 days and is not getting better. Should I continue home care or see a doctor?",
+      "clinical_topic": "Infectious Disease / Febrile Illness",
+      "reference_answer": "You should seek clinical evaluation. WHO guidelines indicate that lack of improvement in a febrile illness after 3 days is a warning sign requiring physician assessment.",
+      "expected_facts": [
+        "seek clinical evaluation",
+        "lack of improvement after 3 days is escalation criterion"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "absence of improvement after 3 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-DNG-01",
+      "user_question": "What distinct symptoms indicate acute dengue fever rather than a routine viral illness?",
+      "clinical_topic": "Infectious Disease / Vector-Borne",
+      "reference_answer": "Dengue fever presents acutely with high fever, severe headache, retro-orbital pain (pain behind the eyes), prominent joint and bone aches ('breakbone pain'), and severe fatigue lasting 2 to 7 days.",
+      "expected_facts": [
+        "retro-orbital pain",
+        "severe joint and bone aches",
+        "high fever",
+        "severe fatigue",
+        "2 to 7 days duration"
+      ],
+      "expected_document_ids": [
+        "MED-DENGUE-FEVER-07"
+      ],
+      "reference_contexts": [
+        "Dengue fever presents acutely with high fever, severe headache, retro-orbital pain, prominent joint and bone aches, and severe fatigue/weakness lasting 2 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-DNG-02",
+      "user_question": "What are the critical warning signs indicating severe dengue that require urgent hospitalization?",
+      "clinical_topic": "Infectious Disease / Vector-Borne",
+      "reference_answer": "Critical warning signs of severe dengue include persistent abdominal pain, persistent vomiting, mucosal bleeding (bleeding gums/nose), fluid accumulation, and extreme lethargy, all requiring urgent hospitalization.",
+      "expected_facts": [
+        "persistent abdominal pain",
+        "persistent vomiting",
+        "mucosal bleeding",
+        "fluid accumulation",
+        "extreme lethargy",
+        "urgent hospitalization"
+      ],
+      "expected_document_ids": [
+        "MED-DENGUE-FEVER-07"
+      ],
+      "reference_contexts": [
+        "Critical warning signs indicating severe dengue include persistent abdominal pain, persistent vomiting, mucosal bleeding, fluid accumulation, and extreme lethargy, requiring urgent hospitalization."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-DNG-03",
+      "user_question": "I have high fever and severe pain behind my eyes with intense muscle and joint soreness for 3 days. What condition should be evaluated?",
+      "clinical_topic": "Infectious Disease / Vector-Borne",
+      "reference_answer": "These symptoms (retro-orbital pain, high fever, and prominent bone/joint pain) strongly suggest Dengue fever. You should seek clinical evaluation and watch closely for mucosal bleeding, vomiting, or abdominal pain.",
+      "expected_facts": [
+        "suggestive of dengue fever",
+        "retro-orbital pain and bone aches characteristic",
+        "clinical evaluation required"
+      ],
+      "expected_document_ids": [
+        "MED-DENGUE-FEVER-07"
+      ],
+      "reference_contexts": [
+        "Dengue fever presents acutely with high fever, severe headache, retro-orbital pain, prominent joint and bone aches, and severe fatigue/weakness lasting 2 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-FLU-01",
+      "user_question": "How does seasonal influenza typically present, and what is its standard supportive care?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Influenza is characterized by abrupt onset of fever, chills, pronounced fatigue/weakness, cough, and sore throat lasting 3 to 7 days. Supportive care includes strict bed rest, high fluid intake, and droplet isolation.",
+      "expected_facts": [
+        "abrupt onset",
+        "chills and pronounced fatigue",
+        "cough and sore throat",
+        "strict bed rest",
+        "high fluid intake",
+        "droplet isolation"
+      ],
+      "expected_document_ids": [
+        "MED-INFLUENZA-08"
+      ],
+      "reference_contexts": [
+        "Influenza is characterized by acute abrupt onset of fever, chills, pronounced fatigue and body weakness, cough, and sore throat lasting 3 to 7 days. First-line supportive care includes strict bed rest, high fluid intake, and droplet isolation."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "direct_knowledge"
+    },
+    {
+      "case_id": "TC-FLU-02",
+      "user_question": "What emergency warning signs in flu patients require immediate hospital evaluation?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Patients with influenza should seek urgent medical evaluation if experiencing chest pain, dyspnea (shortness of breath), cyanosis (bluish skin/lips), or rapid clinical decompensation.",
+      "expected_facts": [
+        "chest pain",
+        "dyspnea",
+        "cyanosis",
+        "rapid decompensation"
+      ],
+      "expected_document_ids": [
+        "MED-INFLUENZA-08"
+      ],
+      "reference_contexts": [
+        "Patients should seek urgent medical evaluation if experiencing chest pain, dyspnea, cyanosis, or rapid decompensation."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-FLU-03",
+      "user_question": "I woke up suddenly shaking with chills, a high fever, exhaustion, and a dry cough. What condition matches this abrupt onset?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "An acute, abrupt onset of fever, chills, profound fatigue, cough, and sore throat is classic for seasonal influenza. Strict bed rest, fluids, and isolation are advised.",
+      "expected_facts": [
+        "influenza matches abrupt onset",
+        "chills and severe fatigue",
+        "strict bed rest and fluids"
+      ],
+      "expected_document_ids": [
+        "MED-INFLUENZA-08"
+      ],
+      "reference_contexts": [
+        "Influenza is characterized by acute abrupt onset of fever, chills, pronounced fatigue and body weakness, cough, and sore throat lasting 3 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-AYU-FEV-01",
+      "user_question": "What is the traditional Ayurvedic classification and diet for acute mild fever?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "In Ayurveda, acute mild fever is classified as Jwara. Supportive diet emphasizes Langhana (light, easily digestible foods like rice gruel / yavagu, avoiding heavy or oily foods) and boiled herbal waters such as Shadanga Paniya.",
+      "expected_facts": [
+        "Jwara classification",
+        "Langhana light diet",
+        "rice gruel or yavagu",
+        "Shadanga Paniya",
+        "avoid heavy oily food"
+      ],
+      "expected_document_ids": [
+        "AYU-FEVER-JWARA-01"
+      ],
+      "reference_contexts": [
+        "In Ayurvedic clinical practice, acute mild fever is classified as Jwara. Traditional supportive care emphasizes Langhana (light, easily digestible diet such as rice gruel / yavagu, avoiding heavy or oily foods), drinking Shadanga Paniya (water boiled with dried ginger and nut grass), and fresh Tulsi (Ocimum sanctum) or Giloy (Tinospora cordifolia / Guduchi) decoctions."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-FEV-02",
+      "user_question": "What safety precautions and contraindications apply to Giloy and herbal decoctions for fever?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Herbal decoctions are contraindicated during pregnancy without specialist supervision, and Giloy (Guduchi) must be used with caution in pre-existing liver disease. Ayurvedic herbs are complementary and never replace conventional medical care.",
+      "expected_facts": [
+        "contraindicated in pregnancy without supervision",
+        "caution in pre-existing liver disease",
+        "complementary only",
+        "never replace hospital triage"
+      ],
+      "expected_document_ids": [
+        "AYU-FEVER-JWARA-01"
+      ],
+      "reference_contexts": [
+        "Safety & Contraindications: Herbal decoctions are contraindicated in pregnancy without specialist supervision. Giloy must be used with caution in pre-existing liver disease. Traditional herbs are strictly complementary supportive wellness practices and DO NOT replace conventional medical care."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-FEV-03",
+      "user_question": "What herbs does Ayurveda suggest for mild fever support, and can they replace blood tests?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Fresh Tulsi (Ocimum sanctum) and Giloy (Tinospora cordifolia / Guduchi) decoctions are traditional supportive herbs. They DO NOT replace conventional diagnostics, blood tests, or doctor consultations.",
+      "expected_facts": [
+        "Tulsi and Giloy (Guduchi)",
+        "do not replace diagnostic blood testing",
+        "complementary supportive only"
+      ],
+      "expected_document_ids": [
+        "AYU-FEVER-JWARA-01"
+      ],
+      "reference_contexts": [
+        "fresh Tulsi (Ocimum sanctum) or Giloy (Tinospora cordifolia / Guduchi) decoctions... DO NOT replace conventional medical care, diagnostic blood testing, or hospital triage."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-KASA-01",
+      "user_question": "What traditional Ayurvedic home remedies are used for throat irritation and cough (Kasa)?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Ayurvedic care for cough (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi).",
+      "expected_facts": [
+        "Kasa",
+        "warm water with fresh ginger",
+        "turmeric warm water gargles",
+        "holy basil Tulsi tea"
+      ],
+      "expected_document_ids": [
+        "AYU-RESPIRATORY-KASA-02"
+      ],
+      "reference_contexts": [
+        "Traditional Ayurvedic care for upper respiratory distress and throat irritation (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi) for soothing mucosal inflammation."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-KASA-02",
+      "user_question": "Who should avoid pungent herbs and ginger in Ayurvedic cough remedies?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Pungent herbs should be avoided in patients with active gastric ulcers or severe acid reflux. Additionally, honey is strictly contraindicated in infants under 1 year.",
+      "expected_facts": [
+        "avoid pungent herbs in active gastric ulcers",
+        "avoid in severe reflux",
+        "honey contraindicated under 1 year"
+      ],
+      "expected_document_ids": [
+        "AYU-RESPIRATORY-KASA-02"
+      ],
+      "reference_contexts": [
+        "Contraindications: Avoid pungent herbs in patients with active gastric ulcers or severe reflux. Honey is strictly contraindicated in infants under 1 year."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-HEAD-01",
+      "user_question": "What supportive practices does Ayurveda recommend for stress or tension headache (Shirashoola)?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Ayurveda recommends localized cooling sandalwood (Chandana) or mint paste to the temples, gentle temple massage (Shiroabhyanga) with sesame or Brahmi oil, hydration, and calming breathwork (Pranayama).",
+      "expected_facts": [
+        "Shirashoola",
+        "cooling sandalwood or mint paste to temples",
+        "Shiroabhyanga with sesame or Brahmi oil",
+        "Pranayama breathwork"
+      ],
+      "expected_document_ids": [
+        "AYU-HEADACHE-SHIRASHOOLA-03"
+      ],
+      "reference_contexts": [
+        "For tension-type and stress headache (Shirashoola), traditional supportive practices recommend localized cooling sandalwood (Chandana) or mint paste to the temples, gentle temple massage (Shiroabhyanga) with sesame or Brahmi oil, adequate hydration, and calming breathwork (Pranayama)."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-AYU-HEAD-02",
+      "user_question": "When is head massage (Shiroabhyanga) contraindicated for a headache in Ayurveda?",
+      "clinical_topic": "Complementary Medicine / Ayurveda",
+      "reference_answer": "Head massage is contraindicated in cases of acute head trauma, high fever, or suspected hypertensive crisis. Sudden severe thunderclap headaches require immediate emergency medical evaluation.",
+      "expected_facts": [
+        "contraindicated in acute head trauma",
+        "contraindicated in high fever",
+        "contraindicated in hypertensive crisis",
+        "emergency for thunderclap"
+      ],
+      "expected_document_ids": [
+        "AYU-HEADACHE-SHIRASHOOLA-03"
+      ],
+      "reference_contexts": [
+        "Contraindications: Do not perform head massage in cases of acute head trauma, high fever, or suspected hypertensive crisis. Immediate conventional medical emergency evaluation is mandatory for sudden severe 'thunderclap' headache."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "ayurvedic_guidance"
+    },
+    {
+      "case_id": "TC-DIFF-01",
+      "user_question": "How do I tell if my headache is a tension headache or a migraine?",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "Tension headaches are typically bilateral, dull, non-throbbing band-like ache of mild-to-moderate intensity without severe vomiting or aura. Migraines are usually unilateral, pulsating or throbbing, moderate-to-severe, and accompanied by nausea, vomiting, photophobia, or phonophobia.",
+      "expected_facts": [
+        "tension is bilateral dull band-like",
+        "migraine is unilateral throbbing pulsating",
+        "migraine has nausea photophobia aura",
+        "tension lacks systemic features"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01",
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck.",
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache lasting 4 to 72 hours. It is frequently accompanied by nausea, vomiting, photophobia, or phonophobia."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-DIFF-02",
+      "user_question": "I have had a high fever for 3 days with intense joint aches and pain behind my eyes. How does this differ from routine viral fever?",
+      "clinical_topic": "Infectious Disease / Vector-Borne",
+      "reference_answer": "Routine viral fever features generalized malaise and mild body aches lasting 2-5 days. Severe retro-orbital pain and prominent bone/joint aches are hallmark features of Dengue fever, requiring clinical evaluation and platelet monitoring.",
+      "expected_facts": [
+        "routine viral fever has generalized malaise",
+        "dengue features retro-orbital and bone pain",
+        "dengue requires monitoring for severe warning signs"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06",
+        "MED-DENGUE-FEVER-07"
+      ],
+      "reference_contexts": [
+        "Acute viral fever presents with elevated body temperature, generalized malaise, muscle aches, and body weakness typically lasting 2 to 5 days without focal localized bacterial infection.",
+        "Dengue fever presents acutely with high fever, severe headache, retro-orbital pain, prominent joint and bone aches, and severe fatigue/weakness lasting 2 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-DIFF-03",
+      "user_question": "How does acute bronchitis differ from common viral pharyngitis in symptoms and duration?",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "Viral pharyngitis primarily affects the upper throat with scratchiness, congestion, and mild cough lasting 3 to 7 days. Acute bronchitis involves the large airways with persistent chest cough (with or without sputum) lasting up to 2 to 3 weeks.",
+      "expected_facts": [
+        "pharyngitis affects upper throat for 3 to 7 days",
+        "bronchitis involves large airways coughing for 2 to 3 weeks",
+        "both are typically viral"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03",
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days.",
+        "Acute bronchitis involves inflammation of the large airways, typically manifesting as persistent cough (with or without sputum) lasting up to 2-3 weeks following an upper respiratory viral illness."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-DIFF-04",
+      "user_question": "What is the difference in onset and systemic severity between seasonal influenza and a common cold?",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Influenza features an abrupt, sudden onset with pronounced chills, high fever, severe prostration/fatigue, and body aches. Common viral pharyngitis/colds feature a gradual onset of scratchy throat, nasal congestion, and low-grade fever.",
+      "expected_facts": [
+        "influenza has abrupt sudden onset",
+        "influenza causes severe fatigue chills prostration",
+        "colds have gradual onset with scratchy throat"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03",
+        "MED-INFLUENZA-08"
+      ],
+      "reference_contexts": [
+        "Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days.",
+        "Influenza is characterized by acute abrupt onset of fever, chills, pronounced fatigue and body weakness, cough, and sore throat lasting 3 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-DIFF-05",
+      "user_question": "Can Ayurvedic steam, ginger, and turmeric treatments be combined with rest for acute cough?",
+      "clinical_topic": "Complementary Medicine / Respiratory",
+      "reference_answer": "Yes. Clinical supportive measures (steam inhalation, hydration, honey) align well with traditional Ayurvedic practices (warm ginger water, turmeric gargles, Tulsi tea) for soothing upper airway irritation.",
+      "expected_facts": [
+        "steam inhalation and hydration",
+        "ginger and turmeric gargles",
+        "supportive complementary alignment"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05",
+        "AYU-RESPIRATORY-KASA-02"
+      ],
+      "reference_contexts": [
+        "Supportive measures: steam inhalation, hydration, honey, and rest.",
+        "Traditional Ayurvedic care for upper respiratory distress and throat irritation (Kasa) includes warm water with fresh crushed ginger (Zingiber officinale), turmeric (Curcuma longa) warm water gargles, and herbal tea with holy basil (Tulsi)."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-DIFF-06",
+      "user_question": "I have a headache, low fever of 99.8 F, and mild nasal congestion for 3 days. What are the likely causes?",
+      "clinical_topic": "Infectious Disease / Primary Care",
+      "reference_answer": "This constellation is consistent with an acute upper respiratory viral syndrome (common cold/viral pharyngitis) or viral fever with secondary tension-type headache. Supportive care includes rest, hydration, and monitoring.",
+      "expected_facts": [
+        "upper respiratory viral illness",
+        "viral fever with tension headache",
+        "supportive hydration and rest"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01",
+        "MED-VIRAL-PHARYNGITIS-03",
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days.",
+        "Acute viral fever presents with elevated body temperature, generalized malaise, muscle aches, and body weakness typically lasting 2 to 5 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "differential_diagnosis"
+    },
+    {
+      "case_id": "TC-REPH-01",
+      "user_question": "My head feels like it is in a vice grip. No sick feeling, just steady pressure around the temples. Started this morning.",
+      "clinical_topic": "Neurology / Headache",
+      "reference_answer": "A vice-grip or band-like steady pressure around temples without nausea describes a tension-type headache. Recommended care includes resting in a quiet space, hydration, and neck relaxation.",
+      "expected_facts": [
+        "vice grip matches band-like pressure",
+        "tension headache",
+        "rest in quiet space",
+        "hydration"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Tension-type headache (TTH) is characterized by dull, non-throbbing, band-like pain around the head or neck."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-REPH-02",
+      "user_question": "One side of my head is pounding like a drum, I threw up once, and daylight is agonizing.",
+      "clinical_topic": "Neurology / Migraine",
+      "reference_answer": "Unilateral pounding pain accompanied by vomiting and severe photophobia (daylight sensitivity) is characteristic of an acute migraine. Rest in a dark, quiet room with a cool forehead compress.",
+      "expected_facts": [
+        "unilateral pounding matches pulsating migraine",
+        "vomiting and photophobia",
+        "rest in dark room and cold compress"
+      ],
+      "expected_document_ids": [
+        "MED-MIGRAINE-WITHOUT-AURA-02"
+      ],
+      "reference_contexts": [
+        "Migraine is a recurrent neurological disorder typically presenting with unilateral, throbbing or pulsating moderate-to-severe headache... frequently accompanied by nausea, vomiting, photophobia."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-REPH-03",
+      "user_question": "My throat feels on fire when I swallow and my nose is stuffed up, but no breathing trouble. It started 2 days back.",
+      "clinical_topic": "Infectious Disease / Respiratory",
+      "reference_answer": "Sore throat on swallowing with nasal congestion lasting 2 days is characteristic of acute viral pharyngitis. Salt water gargles, hydration, honey, and rest provide supportive relief.",
+      "expected_facts": [
+        "viral pharyngitis",
+        "salt water gargles",
+        "oral hydration",
+        "honey and rest"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Viral pharyngitis and common cold syndromes present with scratchy throat, nasal congestion, low-grade fever, and cough lasting 3 to 7 days."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-REPH-04",
+      "user_question": "Tummy bug with non-stop watery bathroom trips since 6 AM. Feeling parched.",
+      "clinical_topic": "Gastroenterology / Infection",
+      "reference_answer": "Acute watery diarrhea indicates viral gastroenteritis. To prevent dehydration, take small frequent sips of ORS or electrolyte fluid and avoid sugary drinks.",
+      "expected_facts": [
+        "viral gastroenteritis",
+        "prevent dehydration",
+        "frequent small sips of ORS",
+        "avoid sugary drinks"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "Acute viral gastroenteritis is characterized by sudden onset nausea, vomiting, watery diarrhea... The primary clinical objective is preventing dehydration."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-REPH-05",
+      "user_question": "Hacking chest cough after having a cold last week. Chest muscles are sore from coughing all day.",
+      "clinical_topic": "Pulmonology / Respiratory",
+      "reference_answer": "A persistent chest cough following a cold is characteristic of acute bronchitis. Supportive measures include steam inhalation, hydration, honey, and rest.",
+      "expected_facts": [
+        "acute bronchitis",
+        "steam inhalation",
+        "hydration",
+        "honey and rest"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05"
+      ],
+      "reference_contexts": [
+        "Acute bronchitis involves inflammation of the large airways, typically manifesting as persistent cough (with or without sputum) lasting up to 2-3 weeks following an upper respiratory viral illness."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-REPH-06",
+      "user_question": "Running a mild fever of 100.5 with achy legs and back for 2 days. No stomach pain or chest cough.",
+      "clinical_topic": "Infectious Disease / Febrile Illness",
+      "reference_answer": "Mild fever with generalized muscle aches lasting 2 days without focal localized infection is consistent with acute viral fever. Rest, fluid intake, and lukewarm sponging are recommended.",
+      "expected_facts": [
+        "acute viral fever",
+        "lukewarm sponging",
+        "fluid intake and rest"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Acute viral fever presents with elevated body temperature, generalized malaise, muscle aches, and body weakness typically lasting 2 to 5 days without focal localized bacterial infection."
+      ],
+      "expected_evidence_sufficiency": "sufficient",
+      "case_category": "symptom_triage"
+    },
+    {
+      "case_id": "TC-OOC-01",
+      "user_question": "I have severe pain in my lower right abdomen near the hip bone, with nausea and loss of appetite. What is the diagnosis?",
+      "clinical_topic": "Abdominal / Surgery (Out of Corpus)",
+      "reference_answer": "Evidence is insufficient in our medical knowledge base regarding acute lower right quadrant abdominal pain (suspected appendicitis). This requires immediate in-person emergency surgical evaluation.",
+      "expected_facts": [
+        "insufficient evidence in medical knowledge base",
+        "in-person emergency evaluation required",
+        "suspected appendicitis not covered"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-02",
+      "user_question": "What is the recommended sliding scale insulin protocol for diabetic ketoacidosis?",
+      "clinical_topic": "Endocrinology / Diabetes (Out of Corpus)",
+      "reference_answer": "Our clinical knowledge base contains no verified guidelines on diabetic ketoacidosis or insulin dosing protocols. DKA is a life-threatening medical emergency requiring immediate hospital admission.",
+      "expected_facts": [
+        "insufficient evidence in medical knowledge base",
+        "no insulin protocol in corpus",
+        "emergency hospital admission required"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-03",
+      "user_question": "What is the first-line medication treatment for acute acute angle-closure glaucoma?",
+      "clinical_topic": "Ophthalmology / Glaucoma (Out of Corpus)",
+      "reference_answer": "There is no information on acute angle-closure glaucoma in our medical repository. Acute angle-closure glaucoma is an ophthalmologic emergency requiring urgent emergency department care.",
+      "expected_facts": [
+        "insufficient evidence in knowledge base",
+        "ophthalmologic emergency",
+        "emergency department evaluation required"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-04",
+      "user_question": "How should acute Lyme disease with erythema migrans rash be treated?",
+      "clinical_topic": "Infectious Disease / Tick-borne (Out of Corpus)",
+      "reference_answer": "Our clinical repository does not contain guidelines for Lyme disease or erythema migrans. Consult a licensed physician for diagnostic serology and prescription antibiotic management.",
+      "expected_facts": [
+        "insufficient evidence in knowledge base",
+        "consult licensed physician",
+        "Lyme disease not in corpus"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-05",
+      "user_question": "What are the stages and treatment protocol for Rheumatoid Arthritis flare-ups?",
+      "clinical_topic": "Rheumatology / Autoimmune (Out of Corpus)",
+      "reference_answer": "Rheumatoid arthritis is outside the scope of our acute triage knowledge base. Insufficient clinical evidence is available. Consult a rheumatologist for chronic autoimmune management.",
+      "expected_facts": [
+        "insufficient clinical evidence",
+        "outside acute triage corpus",
+        "consult rheumatologist"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-06",
+      "user_question": "I suspect I have kidney stones because of severe sharp flank pain radiating to my groin. How do I dissolve them?",
+      "clinical_topic": "Nephrology / Urology (Out of Corpus)",
+      "reference_answer": "Our clinical repository has no data regarding nephrolithiasis (kidney stones) or dissolution protocols. Severe flank pain radiating to the groin requires urgent medical evaluation and imaging.",
+      "expected_facts": [
+        "insufficient evidence in knowledge base",
+        "kidney stones not in corpus",
+        "urgent medical evaluation required"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-OOC-07",
+      "user_question": "What is the recommended dose of levothyroxine for Hashimoto's thyroiditis?",
+      "clinical_topic": "Endocrinology / Thyroid (Out of Corpus)",
+      "reference_answer": "Our system does not contain guidelines on Hashimoto's thyroiditis or thyroid hormone replacement dosing. Insufficient evidence is available. Please consult an endocrinologist.",
+      "expected_facts": [
+        "insufficient evidence in knowledge base",
+        "no thyroid dosing guidelines",
+        "consult endocrinologist"
+      ],
+      "expected_document_ids": [],
+      "reference_contexts": [],
+      "expected_evidence_sufficiency": "insufficient",
+      "case_category": "out_of_corpus"
+    },
+    {
+      "case_id": "TC-EMERG-01",
+      "user_question": "I suddenly got the worst headache of my life 10 minutes ago, like an explosion in my brain, and my neck is stiffening up.",
+      "clinical_topic": "Neurology / Emergency Triage",
+      "reference_answer": "This sudden, explosive 'thunderclap' headache with neck stiffness is a critical medical emergency (possible subarachnoid hemorrhage). Do not attempt home care. Call emergency medical services (108/911) immediately.",
+      "expected_facts": [
+        "thunderclap headache is emergency",
+        "call emergency services immediately 108/911",
+        "possible subarachnoid hemorrhage",
+        "do not attempt home care"
+      ],
+      "expected_document_ids": [
+        "MED-TENSION-HEADACHE-01"
+      ],
+      "reference_contexts": [
+        "Warning signs requiring physician evaluation include sudden thunderclap onset, fever with neck stiffness, or headache following head trauma."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-EMERG-02",
+      "user_question": "My 4-year-old child has a sore throat, cannot swallow saliva, is drooling, and is making a high-pitched whistling noise when breathing in.",
+      "clinical_topic": "Infectious Disease / Pediatric Emergency",
+      "reference_answer": "Inability to swallow, drooling, and stridor (high-pitched inspiratory noise) indicate upper airway obstruction or acute epiglottitis. This is a critical pediatric emergency requiring immediate emergency room transport.",
+      "expected_facts": [
+        "stridor drooling and inability to swallow indicate emergency",
+        "immediate emergency room transport",
+        "airway obstruction danger"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-PHARYNGITIS-03"
+      ],
+      "reference_contexts": [
+        "Red-flag warning signs include inability to swallow liquids, drooling, stridor (wheezing during inhalation), or high persistent fever > 102F."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-EMERG-03",
+      "user_question": "I have been vomiting blood and have dark bloody diarrhea with extreme dizziness and cannot stand up.",
+      "clinical_topic": "Gastroenterology / Emergency Bleeding",
+      "reference_answer": "Vomiting blood (hematemesis) and bloody diarrhea with dizziness indicate severe gastrointestinal bleeding and hemodynamic compromise. Call emergency services immediately for hospitalization.",
+      "expected_facts": [
+        "severe gastrointestinal bleeding is medical emergency",
+        "call emergency services immediately",
+        "blood in stool and vomiting warning sign"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-GASTROENTERITIS-04"
+      ],
+      "reference_contexts": [
+        "Emergency warning signs: signs of severe dehydration (lethargy, dry mouth, absence of urination for 8+ hours), persistent vomiting preventing fluid retention, high fever, or blood in stool."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-EMERG-04",
+      "user_question": "Diagnosed with dengue 4 days ago, but now I have intense abdominal pain, non-stop vomiting, and my gums won't stop bleeding.",
+      "clinical_topic": "Infectious Disease / Severe Dengue",
+      "reference_answer": "Persistent abdominal pain, persistent vomiting, and mucosal bleeding are critical warning signs of severe dengue. Immediate hospitalization and intravenous fluid therapy are mandatory.",
+      "expected_facts": [
+        "critical warning signs of severe dengue",
+        "mucosal bleeding and abdominal pain",
+        "immediate hospitalization mandatory"
+      ],
+      "expected_document_ids": [
+        "MED-DENGUE-FEVER-07"
+      ],
+      "reference_contexts": [
+        "Critical warning signs indicating severe dengue include persistent abdominal pain, persistent vomiting, mucosal bleeding, fluid accumulation, and extreme lethargy, requiring urgent hospitalization."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-EMERG-05",
+      "user_question": "I have a cough and fever, and my lips are turning blue and I can barely speak due to shortness of breath at rest.",
+      "clinical_topic": "Pulmonology / Acute Respiratory Failure",
+      "reference_answer": "Cyanosis (blue lips) and severe dyspnea at rest indicate acute respiratory failure or severe pneumonia. Call emergency services (108/911) immediately for oxygen therapy and emergency triage.",
+      "expected_facts": [
+        "cyanosis and dyspnea indicate respiratory emergency",
+        "immediate emergency services call",
+        "hospital oxygen therapy needed"
+      ],
+      "expected_document_ids": [
+        "MED-ACUTE-BRONCHITIS-05",
+        "MED-INFLUENZA-08"
+      ],
+      "reference_contexts": [
+        "Immediate medical evaluation is warranted if the patient develops shortness of breath at rest, chest pain, hemoptysis (coughing blood)",
+        "Patients should seek urgent medical evaluation if experiencing chest pain, dyspnea, cyanosis, or rapid decompensation."
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    },
+    {
+      "case_id": "TC-EMERG-06",
+      "user_question": "I have high fever and severe headache, and my neck is so stiff I cannot touch my chin to my chest at all, and I feel delirious.",
+      "clinical_topic": "Infectious Disease / Suspected Meningitis",
+      "reference_answer": "High fever with neck rigidity and altered mental state (delirium) are classic signs of bacterial meningitis. This is a life-threatening medical emergency requiring immediate hospitalization.",
+      "expected_facts": [
+        "severe headache with neck rigidity is emergency",
+        "possible meningitis",
+        "immediate hospitalization required"
+      ],
+      "expected_document_ids": [
+        "MED-VIRAL-FEVER-06"
+      ],
+      "reference_contexts": [
+        "Warning signs requiring immediate clinical escalation include body temperature above 102F (38.9C), persistent vomiting, severe headache with neck rigidity, shortness of breath, confusion"
+      ],
+      "expected_evidence_sufficiency": "emergency_abstention",
+      "case_category": "emergency_safety"
+    }
+  ]
+}
