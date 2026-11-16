@@ -60,6 +60,8 @@ def decode_unverified_token(token: str) -> Dict[str, Any]:
             return json.loads(decoded)
     except Exception:
         pass
+    if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
+        return {"sub": token}
     return {"sub": "authenticated_patient"}
 
 
@@ -96,15 +98,24 @@ def verify_clerk_token(token: str) -> Dict[str, Any]:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authorization token has expired.",
         )
-    except Exception:
-        return decode_unverified_token(token)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.warning(f"Clerk JWT validation failed: {e}")
+        if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
+            return decode_unverified_token(token)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or untrusted authorization token.",
+        )
 
 
 def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> str:
+    """Enforces strict authenticated Clerk user identity."""
     if not credentials or not credentials.credentials:
-        if settings.app_env in ("development", "testing"):
+        if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
             return "dev_authenticated_patient"
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -113,16 +124,28 @@ def get_current_user(
         )
 
     payload = verify_clerk_token(credentials.credentials)
-    user_id = payload.get("sub") or payload.get("user_id") or "dev_authenticated_patient"
+    user_id = payload.get("sub") or payload.get("user_id")
+    if not user_id:
+        if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
+            return "dev_authenticated_patient"
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token subject (user_id) missing from verified claims.",
+        )
     return str(user_id)
 
 
 def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> str:
+    """Resolves authenticated user, respecting allow_dev_auth during local development."""
     if not credentials or not credentials.credentials:
-        return "dev_authenticated_patient"
+        if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
+            return "dev_authenticated_patient"
+        return "anonymous_patient"
     try:
         return get_current_user(credentials)
-    except Exception:
-        return "dev_authenticated_patient"
+    except HTTPException:
+        if settings.allow_dev_auth and settings.app_env in ("development", "testing"):
+            return "dev_authenticated_patient"
+        return "anonymous_patient"
